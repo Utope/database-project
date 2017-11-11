@@ -14,11 +14,6 @@ public abstract class Entity {
 		this.currentHealth = maxHealth;
 		this.damage = damage;
 	}
-	
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 
 	@Override
 	public boolean equals(Object obj) {

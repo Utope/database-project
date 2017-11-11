@@ -1,29 +1,26 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Battle {
 	
 	private Entity entity1;
 	private Entity entity2;
 	
-	private Queue<Action> allBattleActions;
-	private Queue<Action> battleStepActions;
-	
+	private int currentAction;
+	private ArrayList<Action> battleActions;
 	
 	Battle(Entity entity1, Entity entity2){
 		this.entity1 = entity1;
 		this.entity2 = entity2;
 		
-		allBattleActions = new LinkedList<Action>();
-		battleStepActions = new LinkedList<Action>();
+		battleActions = new ArrayList<Action>();
+		currentAction = 0;
 		
 	}
 	
-	public Queue<Action> getAllBattleActions() {
-		return this.allBattleActions;
+	public ArrayList<Action> getBattleActions(){
+		return this.battleActions;
 	}
-	
+
 	public Entity winner() {
 		if(entity1.isAlive() && !entity2.isAlive()) {
 			return entity1;
@@ -35,7 +32,7 @@ public class Battle {
 	}
 	
 	public boolean alive() {
-		if(entity1.isAlive() && entity2.isAlive() || !battleStepActions.isEmpty()) {
+		if(entity1.isAlive() && entity2.isAlive() || currentAction < battleActions.size()) {
 			return true;
 		}else {
 			return false;
@@ -43,24 +40,31 @@ public class Battle {
 	}
 	
 	public void Step() {
-		Action action1 = new Action_Attack(entity1, entity2);
-		Action action2 = new Action_Attack(entity2, entity1);
+		this.battleActions.add(new Action_Attack(entity1, entity2));
 		
-		allBattleActions.add(action1);
-		allBattleActions.add(action2);
 		
-		battleStepActions.add(action1);
-		battleStepActions.add(action2);
-		
-		while(!battleStepActions.isEmpty()) {
-			Action action = battleStepActions.poll();
+		for(; this.currentAction < battleActions.size(); this.currentAction++) {
+			Action action = battleActions.get(currentAction);
 			action.execute();
 			
 			for(Action newAction : action.createdActions) {
-				battleStepActions.add(newAction);
-				allBattleActions.add(newAction);
+				battleActions.add(newAction);
 			}
 		}
+		
+		if(entity2.isAlive()) {
+			this.battleActions.add(new Action_Attack(entity2, entity1));
+			
+			for(; this.currentAction < battleActions.size(); this.currentAction++) {
+				Action action = battleActions.get(currentAction);
+				action.execute();
+				
+				for(Action newAction : action.createdActions) {
+					battleActions.add(newAction);
+				}
+			}
+		}
+		
 		
 		
 	}

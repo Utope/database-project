@@ -1,9 +1,12 @@
+import java.util.ArrayList;
 
 public class Monster extends Entity {
 	private int monsterId;
+	private ArrayList<Loot> loots;
 	
 	public Monster(int entityId, String name, int maxHealth, int damage) {
 		super(entityId, name, maxHealth, damage);
+		loots = new ArrayList<Loot>();
 	}
 
 	@Override
@@ -22,6 +25,14 @@ public class Monster extends Entity {
 
 	public void setMonsterId(int monsterId) {
 		this.monsterId = monsterId;
+	}
+	
+	public void addLoot(Loot loot) {
+		this.loots.add(loot);
+	}
+	
+	public ArrayList<Loot> getLoots() {
+		return this.loots;
 	}
 	
 }
