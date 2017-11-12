@@ -1,10 +1,11 @@
+package core;
 import java.util.ArrayList;
 
 public abstract class Action {
-	public ArrayList<Action> createdActions;
-	
-	public Action() {
-		createdActions = new ArrayList<Action>();
+	public ActionHandler handler;
+
+	public Action(ActionHandler handler) {
+		this.handler = handler;
 	}
 	
 	public abstract void execute();

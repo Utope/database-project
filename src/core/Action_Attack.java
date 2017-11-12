@@ -1,3 +1,4 @@
+package core;
 
 public class Action_Attack extends Action {
 
@@ -7,8 +8,8 @@ public class Action_Attack extends Action {
 	int damage;
 	boolean finishingBlow;
 	
-	public Action_Attack(Entity attacker, Entity reciever) {
-		super();
+	public Action_Attack(Entity attacker, Entity reciever, ActionHandler handler) {
+		super(handler);
 		this.attacker = attacker;
 		this.receiver = reciever;
 	}
@@ -20,11 +21,9 @@ public class Action_Attack extends Action {
 			receiver.setCurrentHealth(receiver.getCurrentHealth() - attacker.getDamage());
 			if(!receiver.isAlive()) {
 				this.finishingBlow = true;
-				this.createdActions.add(new Action_Death(receiver, attacker));
+				this.handler.addAction(new Action_Death(receiver, attacker, handler));
 			}
 		}
-		
-		
 		
 	}
 

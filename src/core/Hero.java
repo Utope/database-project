@@ -1,3 +1,4 @@
+package core;
 
 public class Hero extends Entity {
 	private int heroId;

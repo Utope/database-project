@@ -1,3 +1,4 @@
+package core;
 
 public class Item {
 	private int itemId;

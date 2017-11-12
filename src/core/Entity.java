@@ -1,3 +1,4 @@
+package core;
 
 public abstract class Entity {
 	private int entityId;
