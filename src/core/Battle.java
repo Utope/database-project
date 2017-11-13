@@ -1,85 +1,62 @@
 package core;
 import java.util.ArrayList;
 
-public class Battle implements ActionHandler {
+import core.commands.Action_AttemptAttack;
+import core.commands.Creates_EntityAttemptAttack;
+import core.commands.ICommand;
+
+public class Battle implements Creates_EntityAttemptAttack {
 	
 	private Entity entity1;
 	private Entity entity2;
-	private Entity actingEntity;
+	private Entity attacker;
+	private Entity defender;
 	
-	private int battleStep;
-	private int currentAction;
-	private ArrayList<Action> battleActions;
-	private ArrayList<Action> battleStepActions;
+	private ArrayList<ICommand> battleActions;
 	
 	Battle(Entity entity1, Entity entity2){
 		this.entity1 = entity1;
 		this.entity2 = entity2;
+		this.attacker= entity1;
+		this.defender = entity2;
 		
-		battleActions = new ArrayList<Action>();
-		battleStepActions = new ArrayList<Action>();
-		currentAction = 0;
-		battleStep = 0;
+		battleActions = new ArrayList<ICommand>();
 		
 	}
 	
-	public ArrayList<Action> getBattleActions(){
+	public ArrayList<ICommand> getBattleActions(){
 		return this.battleActions;
-	}
-	
-	public ArrayList<Action> getBattleStepActions(){
-		return this.battleStepActions;
 	}
 
 	public boolean alive() {
-		if(entity1.isAlive() && entity2.isAlive() || this.currentAction < this.battleActions.size()) {
+		if(entity1.isAlive() && entity2.isAlive()) {
 			return true;
 		}else {
 			return false;
 		}
 	}
 	
-	public void Step() {
+	public void step() {
 		
-		
-		this.battleStepActions.clear();
-		
-		if(this.actingEntity == null) {
-			this.actingEntity = this.entity1;
-		}else if(this.actingEntity == entity1){
-			if(actingEntity.isAlive()) {
-				this.addAction(new Action_AttemptAttack(this.entity1, this.entity2, this));
-				this.executeActions();
-				actingEntity = this.entity2;
-			}
-		}else if(this.actingEntity == entity2) {
-			if(entity2.isAlive()) {
-				this.addAction(new Action_AttemptAttack(this.entity2, this.entity1, this));
-				this.executeActions();
-				actingEntity = this.entity1;
-			}
+		if(attacker.isAlive()) {
+			this.entityAttemptAttack(attacker, defender);
 		}
 		
-		++this.battleStep;		
+		swapAttackingAndDefendingEntitys();
 		
 	}
 	
-	public int getBattleStep() {
-		return this.battleStep;
+	private void swapAttackingAndDefendingEntitys() {
+		Entity temp = this.attacker;
+		this.attacker = this.defender;
+		this.defender = temp;
 	}
-
+	
 	@Override
-	public void addAction(Action action) {
-		battleStepActions.add(action);
-		battleActions.add(action);
-		
-	}
-	
-	public void executeActions() {
-		for(; this.currentAction < battleActions.size(); this.currentAction++) {
-			Action action = battleActions.get(currentAction);
-			action.execute();
-		}
+	public void entityAttemptAttack(Entity attacker, Entity defender) {
+		Action_AttemptAttack actionAttemptAttack = new Action_AttemptAttack(attacker,defender,this);
+		Game.getCommandHandler().add(actionAttemptAttack);
+		this.battleActions.add(actionAttemptAttack);
 	}
 	
 	

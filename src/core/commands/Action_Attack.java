@@ -1,6 +1,9 @@
-package core;
+package core.commands;
 
-public class Action_Attack extends Action {
+import core.Entity;
+import core.Game;
+
+public class Action_Attack extends ICommand implements EntityAction, CommandOutput, Creates_EntityDeath{
 
 	Entity attacker;
 	Entity receiver;
@@ -8,8 +11,8 @@ public class Action_Attack extends Action {
 	int damage;
 	boolean finishingBlow;
 	
-	public Action_Attack(Entity attacker, Entity reciever, ActionHandler handler) {
-		super(handler);
+	public Action_Attack(Entity attacker, Entity reciever, ICommand_Creator source) {
+		super(source);
 		this.attacker = attacker;
 		this.receiver = reciever;
 	}
@@ -21,15 +24,20 @@ public class Action_Attack extends Action {
 			receiver.setCurrentHealth(receiver.getCurrentHealth() - attacker.getDamage());
 			if(!receiver.isAlive()) {
 				this.finishingBlow = true;
-				this.handler.addAction(new Action_Death(receiver, attacker, handler));
+				this.entityDeath(this.receiver, this.attacker);
 			}
 		}
 		
 	}
 
 	@Override
-	public String textView() {
+	public String output() {
 		return attacker.getName() + " Dealt " + attacker.getDamage() + " Dmg to " + receiver.getName(); 
+	}
+
+	@Override
+	public void entityDeath(Entity killed, Entity killedBy) {
+		Game.getCommandHandler().add(new Action_Death(killed, killedBy, this));
 	}
 
 }

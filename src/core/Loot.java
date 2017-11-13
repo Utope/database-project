@@ -1,8 +1,8 @@
 package core;
 
 public class Loot {
-	Item item;
-	float dropChance;
+	private Item item;
+	private float dropChance;
 	
 	public Loot(Item item, float dropChance) {
 		this.item = item;

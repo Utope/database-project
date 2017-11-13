@@ -33,7 +33,7 @@ public abstract class Entity {
 			return false;
 		}
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
