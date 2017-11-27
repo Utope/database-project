@@ -25,7 +25,9 @@ public class Game implements Runnable{
             Game.load(username, password);
         }
         public static void load(String username, String password){
-     
+        
+        Game.player = Repository.Instance().loadPlayer(username, password);
+            
         Game.cont = true;
         Game.loaded = true;
         }
@@ -46,11 +48,6 @@ public class Game implements Runnable{
 		return Game.player;
 	}
 	
-	public static void loadPlayer() {
-		Game.player = new Player();
-		Game.player.setCurrentHero(entityFactory.createHero());
-	}
-	
 	public static EntityFactory getEntityFactory() {
 		return Game.entityFactory;
 	}
@@ -68,9 +65,10 @@ public class Game implements Runnable{
 	}
         
         public static void loop(){
+            if(Game.currentBattle == null){
+                Game.currentBattle = new Battle(Game.player.getCurrentHero(), entityFactory.createMonster());
+            }
             
-            Game.loadPlayer();
-		Game.currentBattle = new Battle(Game.player.getCurrentHero(), entityFactory.createMonster());
 		
 		
 		while(Game.cont) {
@@ -109,6 +107,8 @@ public class Game implements Runnable{
         });
         
         
+        
+        
         while(Game.screen == null){
             try {
                 Thread.sleep(100);
@@ -118,10 +118,15 @@ public class Game implements Runnable{
         }
         while(Game.cont){
             Game.screen.getTestLabel().setText(String.valueOf(System.currentTimeMillis()));
-
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(Game.player.getUsername());
+           // Game.loop();
             
             Game.screen.repaint();
-            System.out.println(System.currentTimeMillis());
         }
         
         Game.screen.dispose();

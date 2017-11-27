@@ -1,4 +1,5 @@
 package database;
+import core.Inventory;
 import core.Player;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,7 +34,7 @@ public class Repository {
         public boolean doPlayerCredentialsExits(String username, String password){
             
             Statement stmt = null;
-             String query = "select username, password from player where username=\"" + username +"\" AND password=\"" + password + "\""; 
+            String query = "select username, password from player where username=\"" + username +"\" AND password=\"" + password + "\""; 
             try {
             stmt = this.conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -48,5 +49,28 @@ public class Repository {
         }
         return false;
        }
-	
+        
+        public Player loadPlayer(String username, String password){
+            try{
+                Statement stmt = this.conn.createStatement();
+                String query = "select id, username from player where username=\"" + username +"\" AND password=\"" + password + "\""; 
+                ResultSet rs = stmt.executeQuery(query);
+                
+                Player player = null;
+                while(rs.next()){
+                    player = new Player(rs.getInt("id"));
+                    player.setUsername(rs.getString("username"));
+                }
+                return player;
+                
+            }catch(SQLException e){
+                  System.out.println(e.getMessage());
+            }
+            return null;
+        }
+        /*
+        public Inventory loadPlayerInventory(String playerId){
+            
+        }
+	*/
 }

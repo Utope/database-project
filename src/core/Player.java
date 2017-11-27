@@ -4,13 +4,27 @@ import java.util.ArrayList;
 
 public class Player {
 	private int playerId;
+        private String username;
 	private Hero currentHero;
 	private Inventory inventory;
 	private Battle currentBattle;
 	
-	public Player(){
-		this.inventory = new Inventory();
+	public Player(int id){
+            this.playerId = id;
+            this.inventory = new Inventory();
 	}
+        
+        public void setUsername(String username){
+            this.username = username;
+        }
+        
+        public String getUsername(){
+            return username;
+        }
+        
+        public int getId(){
+            return playerId;
+        }
 	
 	public int getPlayerId() {
 		return this.playerId;

@@ -7,6 +7,8 @@ package ui;
 
 import core.Game;
 import database.Repository;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -26,6 +28,8 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
     
     public void closeWindow(){
