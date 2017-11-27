@@ -9,6 +9,10 @@ import core.Game;
 import database.Repository;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,33 +26,6 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         initComponents();
-        
-        this.loginButton.addActionListener(new ActionListener(){
-           
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = usernameTextField.getText();
-                String password = passwordTextField.getText();
-                
-               if(!LoginManager.attemptLogin(username, password)){
-                   JOptionPane.showMessageDialog(
-                        null,
-                        "Login error", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-               }else{
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Login Success!");
-                
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                new MainGame(username,password).setVisible(true);
-                }
-            });               
-                  closeWindow();
-               }
-            }
-        });
     }
     
     public void closeWindow(){
@@ -112,9 +89,19 @@ public class login extends javax.swing.JFrame {
         getContentPane().add(jPanel3);
 
         loginButton.setText("login");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
         jPanel4.add(loginButton);
 
         createAccountButton.setText("Create Account");
+        createAccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createAccountButtonActionPerformed(evt);
+            }
+        });
         jPanel4.add(createAccountButton);
 
         getContentPane().add(jPanel4);
@@ -130,6 +117,80 @@ public class login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordTextFieldActionPerformed
 
+    private void createAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAccountButtonActionPerformed
+        
+        String username = null;
+        String password = null;
+        
+        username = JOptionPane.showInputDialog("Input Username");
+        
+         Connection con = Repository.Instance().getConn();
+         Statement stmt = null;
+         String query = "select username from DatabaseGame.player where username=\"" + username + "\""; 
+         try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            if(rs.next()){
+                username = null;
+            }
+        
+        } catch (SQLException e ) {
+       
+        }
+         
+        if(username == null){
+             JOptionPane.showMessageDialog(
+                        null,
+                        "Username Already Exists", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+             this.createAccountButtonActionPerformed(null);
+        }else{
+            password = JOptionPane.showInputDialog("Input password");
+            stmt = null;
+            query = "insert into DatabaseGame.player (username, password) VALUES (" + "\"" + username + "\"" + ", " + "\"" + password + "\"" + ")"; 
+            
+            
+            try {
+            stmt = con.createStatement();
+            int count = stmt.executeUpdate(query);
+            
+            if(count > 0){
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Creation Success!");
+            }
+        
+        } catch (SQLException e ) {
+       
+        }
+            
+            
+            
+        }
+        
+    }//GEN-LAST:event_createAccountButtonActionPerformed
+
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+              String username = usernameTextField.getText();
+              String password = passwordTextField.getText();
+                
+               if(!Repository.Instance().doPlayerCredentialsExits(username, password)){
+                   JOptionPane.showMessageDialog(
+                        null,
+                        "Login error", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+               }else{
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Login Success!");
+                Thread thread = new Thread(new Game(username, password));
+                thread.start();
+            }               
+                  closeWindow();
+            
+    }//GEN-LAST:event_loginButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createAccountButton;
@@ -144,4 +205,33 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JTextField usernameTextField;
     private javax.swing.JLabel usernamejLabel;
     // End of variables declaration//GEN-END:variables
+    
+    public static void main(String[] args){
+         
+        
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new login().setVisible(true);
+            }
+        });
+    }
 }

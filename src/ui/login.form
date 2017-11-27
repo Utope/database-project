@@ -83,11 +83,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="login"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="createAccountButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Create Account"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createAccountButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

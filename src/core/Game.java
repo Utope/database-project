@@ -1,25 +1,37 @@
 package core;
 
+import database.Repository;
 import java.util.Iterator;
 
 import core.commands.CommandHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import ui.MainGame;
+import ui.login;
 
-public class Game implements Runnable {
-	private static Player player;
+public class Game implements Runnable{
+	//private static Player player;
 	private static CommandHandler commandHandler;
 	private static Battle currentBattle;
 	private static EntityFactory entityFactory = new EntityFactory();
-	
-	
-        String username;
-        String password;
-	
+	private static Player player;
+	private static MainGame screen;
+        
 	private static boolean cont = true;
-	
+	private static boolean loaded = false;
+        
         public Game(String username, String password){
-            this.username = username;
-            this.password = password;
+            Game.load(username, password);
+        }
+        public static void load(String username, String password){
+     
+        Game.cont = true;
+        Game.loaded = true;
+        }
+        
+        public static void setScreen(MainGame screen){
+            Game.screen = screen;
         }
         
 	public static Player getPlayer() {
@@ -88,8 +100,31 @@ public class Game implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(this.username);
-        System.out.println(this.password);
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                Game.screen = new MainGame();
+                Game.screen.setVisible(true);
+            }
+        });
+        
+        
+        while(Game.screen == null){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        while(Game.cont){
+            Game.screen.getTestLabel().setText(String.valueOf(System.currentTimeMillis()));
+
+            
+            Game.screen.repaint();
+            System.out.println(System.currentTimeMillis());
+        }
+        
+        Game.screen.dispose();
     }
 	
 }
