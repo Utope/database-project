@@ -23,5 +23,9 @@ public class Repository {
 	public static Repository Instance() {
 		return Repository.repo;
 	}
+        
+        public Connection getConn(){
+            return this.conn;
+        }
 	
 }

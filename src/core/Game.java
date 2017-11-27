@@ -3,17 +3,25 @@ package core;
 import java.util.Iterator;
 
 import core.commands.CommandHandler;
+import ui.MainGame;
 
-public class Game {
+public class Game implements Runnable {
 	private static Player player;
 	private static CommandHandler commandHandler;
 	private static Battle currentBattle;
 	private static EntityFactory entityFactory = new EntityFactory();
 	
 	
+        String username;
+        String password;
 	
 	private static boolean cont = true;
 	
+        public Game(String username, String password){
+            this.username = username;
+            this.password = password;
+        }
+        
 	public static Player getPlayer() {
 		if(Game.player == null) {
 			try {
@@ -46,10 +54,10 @@ public class Game {
 		Game.currentBattle.step();
 		Game.getCommandHandler().execute();
 	}
-	
-	public static void main(String[] args) {
-		
-		Game.loadPlayer();
+        
+        public static void loop(){
+            
+            Game.loadPlayer();
 		Game.currentBattle = new Battle(Game.player.getCurrentHero(), entityFactory.createMonster());
 		
 		
@@ -71,6 +79,17 @@ public class Game {
 			Item item = (Item) it.next();
 			System.out.println(item.getName());
 		}
+        }
+	
+	public static void main(String[] args) {
+
+		
 	}
+
+    @Override
+    public void run() {
+        System.out.println(this.username);
+        System.out.println(this.password);
+    }
 	
 }
