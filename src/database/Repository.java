@@ -1,76 +1,279 @@
 package database;
+
+import core.Entity;
+import core.EntityManager;
+import core.EntityType;
 import core.Inventory;
+import core.Item;
+import core.ItemManager;
+import core.ItemInstance;
 import core.Player;
+import core.PlayerManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Repository {
-	
-	private static Repository repo = new Repository("jdbc:mysql://localhost:3306/DatabaseGame", "root", "root");
-	private Connection conn;
-	
-	private Repository(String url, String username, String password){
-		try{  
-			Class.forName("com.mysql.jdbc.Driver").newInstance();  
-			this.conn = DriverManager.getConnection(url, username, password); 
-			//here sonoo is database name, root is username and password  
-			
-		}catch(Exception e){ 
-			System.out.println(e);
-		}  
-	}
-	
-	public static Repository Instance() {
-		return Repository.repo;
-	}
-        
-        public Connection getConn(){
-            return this.conn;
+
+    private static Repository repo = new Repository("jdbc:mysql://localhost:3306/DatabaseGame", "root", "root");
+    private Connection conn;
+
+    private Repository(String url, String username, String password) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            this.conn = DriverManager.getConnection(url, username, password);
+            //here sonoo is database name, root is username and password  
+
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        
-        public boolean doPlayerCredentialsExits(String username, String password){
-            
-            Statement stmt = null;
-            String query = "select username, password from player where username=\"" + username +"\" AND password=\"" + password + "\""; 
-            try {
+    }
+
+    public static Repository Instance() {
+        return Repository.repo;
+    }
+
+    public Connection getConn() {
+        return this.conn;
+    }
+
+    public boolean doPlayerCredentialsExits(String username, String password) {
+
+        Statement stmt = null;
+        String query = "select username, password from player where username=\"" + username + "\" AND password=\"" + password + "\"";
+        try {
             stmt = this.conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-        
-            if(rs.next()){
+
+            if (rs.next()) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        } catch (SQLException e ) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return false;
-       }
-        
-        public Player loadPlayer(String username, String password){
-            try{
-                Statement stmt = this.conn.createStatement();
-                String query = "select id, username from player where username=\"" + username +"\" AND password=\"" + password + "\""; 
-                ResultSet rs = stmt.executeQuery(query);
-                
-                Player player = null;
-                while(rs.next()){
-                    player = new Player(rs.getInt("id"));
-                    player.setUsername(rs.getString("username"));
-                }
-                return player;
-                
-            }catch(SQLException e){
-                  System.out.println(e.getMessage());
-            }
-            return null;
-        }
-        /*
+    }
+
+    /*
         public Inventory loadPlayerInventory(String playerId){
             
         }
-	*/
+     */
+    public void loadEntityTypes() throws SQLException {
+
+        EntityManager manager = EntityManager.Instance();
+
+        Statement stmt = this.conn.createStatement();
+        String query = "select id, name, description, base_attack, base_defense, base_hit, base_health from entity_type";
+        ResultSet rs = stmt.executeQuery(query);
+
+        while (rs.next()) {
+            manager.addEntityType(new EntityType(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getInt("base_attack"),
+                    rs.getInt("base_defense"),
+                    rs.getInt("base_hit"),
+                    rs.getInt("base_health")
+            ));
+        }
+
+    }
+
+    public void loadPlayers() throws SQLException {
+
+        PlayerManager manager = PlayerManager.Instance();
+        Statement stmt = this.conn.createStatement();
+        String query = "select id, username, password from player";
+        ResultSet rs = stmt.executeQuery(query);
+
+        while (rs.next()) {
+            int playerId = rs.getInt("id");
+
+            Statement stmt2 = this.conn.createStatement();
+            String query2 = "select item_instance_id from player_inventory where player_id=" + playerId;
+            ResultSet rs2 = stmt2.executeQuery(query2);
+
+            Inventory inventory = new Inventory();
+
+            while (rs2.next()) {
+                Iterator it = ItemManager.Instance().getItem_instances().iterator();
+                int itemInstId = rs2.getInt("item_instance_id");
+                while (it.hasNext()) {
+                    ItemInstance itemInst = (ItemInstance) it.next();
+                    if (itemInst.getItemInstanceId() == itemInstId) {
+                        inventory.add(itemInst);
+                        break;
+                    }
+                }
+            }
+
+            manager.addPlayer(new Player(playerId, rs.getString("username"), rs.getString("password"), inventory));
+
+        }
+
+    }
+
+    public void loadEntitys() throws SQLException {
+
+        EntityManager manager = EntityManager.Instance();
+
+        Statement stmt = this.conn.createStatement();
+        String query = "select id, player_id, entity_type_id, name, health, currentHealth, attack, defense, hit from entity";
+        ResultSet rs = stmt.executeQuery(query);
+
+        while (rs.next()) {
+            
+            
+            // find the associate player can be null for monsters
+            int playerId = rs.getInt("player_id");
+            int entityId = rs.getInt("id");
+            int entityTypeId = rs.getInt("entity_type_id");
+            
+            Iterator it = null;
+            
+            Player player = null;
+            it = PlayerManager.Instance().getPlayers().iterator();
+            while (it.hasNext()) {
+                Player p = (Player) it.next();
+                if (p.getPlayerId() == playerId) {
+                    player = p;
+                    break;
+                }
+            }
+            //Freeing up just in case
+            it = null;
+
+            EntityType entityType = null;
+            it = manager.getEntityTypes().iterator();
+            while (it.hasNext()) {
+                EntityType type = (EntityType) it.next();
+                if (type.getId() == entityTypeId) {
+                    entityType = type;
+                    break;
+                }
+            }
+            
+            
+            //Freeing up just in case
+            it = null; 
+
+            Statement stmt2 = this.conn.createStatement();
+            String query2 = "select item_instance_id from entity_inventory where entity_id=" + entityId;
+            ResultSet rs2 = stmt2.executeQuery(query2);
+
+            Inventory inventory = new Inventory();
+
+            while (rs2.next()) {
+                it = ItemManager.Instance().getItem_instances().iterator();
+                int itemInstId = rs2.getInt("item_instance_id");
+                while (it.hasNext()) {
+                    ItemInstance itemInst = (ItemInstance) it.next();
+                    if (itemInst.getItemInstanceId() == itemInstId) {
+                        inventory.add(itemInst);
+                        break;
+                    }
+                }
+            }
+            
+            
+            manager.addEntity(new Entity(
+                    rs.getInt("id"),
+                    player,
+                    entityType,
+                    inventory,
+                    rs.getString("name"),
+                    rs.getInt("health"),
+                    rs.getInt("currenthealth"),
+                    rs.getInt("attack"),
+                    rs.getInt("defense"),
+                    rs.getInt("hit")
+            ));
+        }
+
+    }
+
+    //Verified working
+    public void loadItems() throws SQLException {
+
+        ItemManager manager = ItemManager.Instance();
+
+        Statement stmt = this.conn.createStatement();
+        String query = "select id, name, description from item";
+        ResultSet rs = stmt.executeQuery(query);
+
+        while (rs.next()) {
+            manager.addItem(new Item(rs.getInt("id"), rs.getString("name"), rs.getString("description")));
+        }
+
+    }
+
+    //Verified working
+    public void loadItemInstances() throws SQLException {
+
+        ItemManager manager = ItemManager.Instance();
+
+        Statement stmt = this.conn.createStatement();
+        String query = "select id, item_id, created from item_instance";
+        ResultSet rs = stmt.executeQuery(query);
+
+        while (rs.next()) {
+
+            int itemId = rs.getInt("item_id");
+
+            Iterator it = manager.getItems().iterator();
+            while (it.hasNext()) {
+                Item item = (Item) it.next();
+                if (item.getItemId() == itemId) {
+                    manager.addItem_Instance(new ItemInstance(rs.getInt("id"), item, (rs.getString("created"))));
+                    break; // make sure this only breaks out of current while loop not rs while loop
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        ItemManager.Instance().init();
+        PlayerManager.Instance().init();
+        EntityManager.Instance().init();
+        
+        Iterator it = null;
+        
+        it = ItemManager.Instance().getItems().iterator();
+        System.out.println("Items");
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+
+        it = ItemManager.Instance().getItem_instances().iterator();
+        System.out.println("Item_Instances");
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+
+        it = EntityManager.Instance().getEntityTypes().iterator();
+        System.out.println("~EntityTypes~");
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+
+        it = EntityManager.Instance().getEntitys().iterator();
+        System.out.println("~Entitys~");
+        while (it.hasNext()) {
+            Entity ent = (Entity) it.next();
+            
+            Iterator itt = ent.getInventory().iterator();
+            while(itt.hasNext()){
+                System.out.println(itt.next());
+            }
+            
+        }
+    }
 }

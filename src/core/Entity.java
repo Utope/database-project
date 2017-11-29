@@ -1,76 +1,71 @@
 package core;
 
-public abstract class Entity {
+public class Entity {
 	private int entityId;
-	
-	private String name;
+        private EntityType entityType;
+        private Player player;
+	private Inventory inventory;
+        private String name;
 	private int maxHealth;
 	private int currentHealth;
-	private int damage;
+	private int attack;
+        private int defense;
+        private int hit;
+        
 
-	public Entity(int entityId, String name, int maxHealth, int damage){
-		this.entityId = entityId;
-		this.name = name;
-		this.maxHealth = maxHealth;
-		this.currentHealth = maxHealth;
-		this.damage = damage;
-	}
+    public Entity(int entityId, Player player, EntityType entityType, Inventory inventory, String name, int maxHealth, int currentHealth, int attack, int defense, int hit) {
+        this.entityId = entityId;
+        this.player = player;
+        this.inventory = inventory;
+        this.entityType = entityType;
+        this.name = name;
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+        this.attack = attack;
+        this.defense = defense;
+        this.hit = hit;
+    }
+    
+    public Inventory getInventory(){
+        return this.inventory;
+    }
+    
+    public EntityType getEntityType(){
+        return this.entityType;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof Entity) {
-			if(this.entityId == ((Entity)obj).entityId) {
-				return super.equals(obj);
-			}
-		}
-		return false;
-	}
-	
-	public boolean isAlive() {
-		if(currentHealth > 0) {
-			return true;
-		}else {
-			return false;
-		}
-	}
+    public int getEntityId() {
+        return entityId;
+    }
 
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public int getMaxHealth() {
-		return maxHealth;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public void setMaxHealth(int maxHealth) {
-		this.maxHealth = maxHealth;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getCurrentHealth() {
-		return currentHealth;
-	}
+    public int getMaxHealth() {
+        return maxHealth;
+    }
 
-	public void setCurrentHealth(int currentHealth) {
-		this.currentHealth = currentHealth;
-	}
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
 
-	public int getDamage() {
-		return damage;
-	}
+    public int getAttack() {
+        return attack;
+    }
 
-	public void setDamage(int damage) {
-		this.damage = damage;
-	}
+    public int getDefense() {
+        return defense;
+    }
 
-	public int getEntityId(){
-		return this.entityId;
-	}
-	
-	public void setEntityId(int id) {
-		this.entityId = id;
-	}
+    public int getHit() {
+        return hit;
+    }
+
+
+        
 }

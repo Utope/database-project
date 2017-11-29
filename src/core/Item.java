@@ -10,6 +10,9 @@ public class Item {
 		this.name = name;
 		this.description = description;
 	}
+        
+        public Item(){
+        }
 
 	public int getItemId() {
 		return itemId;
@@ -35,5 +38,9 @@ public class Item {
 		this.description = description;
 	}
 	
+        @Override
+        public String toString(){
+            return "[" + getItemId() + ", " + getName() + "]";
+        }
 	
 }
