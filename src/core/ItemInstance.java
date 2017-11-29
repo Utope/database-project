@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package core;
-
-import java.sql.Timestamp;
-
 /**
  *
  * @author robert

@@ -5,6 +5,8 @@
  */
 package core;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author robert
@@ -17,8 +19,10 @@ public class EntityType {
     private int base_defense;
     private int base_hit;
     private int base_health;
+    private ArrayList<EntityItemDrop> itemDrops;
     
-    public EntityType(int id, String name, String description, int base_attack, int base_defense, int base_hit, int base_health){
+    public EntityType(int id, String name, String description, int base_attack, int base_defense, int base_hit, int base_health, ArrayList<EntityItemDrop> drops){
+        this.itemDrops = drops;
         this.id = id;
         this.name = name;
         this.description = description;
@@ -26,6 +30,10 @@ public class EntityType {
         this.base_defense = base_defense;
         this.base_hit = base_hit;
         this.base_health = base_health;
+    }
+    
+    public ArrayList<EntityItemDrop> getItemDrops(){
+        return this.itemDrops;
     }
 
     public int getId() {
