@@ -8,6 +8,7 @@ package core;
 import database.Repository;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,5 +44,9 @@ public class PlayerManager{
         } catch (SQLException ex) {
             Logger.getLogger(PlayerManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public Iterator getPlayerIterator(){
+        return this.players.iterator();
     }
 }

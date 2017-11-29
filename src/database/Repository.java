@@ -10,6 +10,7 @@ import core.ItemManager;
 import core.ItemInstance;
 import core.Player;
 import core.PlayerManager;
+import core.commands.ICommand;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,7 +32,6 @@ public class Repository {
 
     private static Repository repo = new Repository("jdbc:mysql://localhost:3306/DatabaseGame", "root", "root");
     private Connection conn;
-    private Random random;
 
     private Repository(String url, String username, String password) {
         try {
@@ -42,8 +42,7 @@ public class Repository {
         } catch (Exception e) {
             System.out.println(e);
         }
-        random = new Random();
-        random.setSeed(System.currentTimeMillis());
+        
 
     }
 
@@ -82,6 +81,10 @@ public class Repository {
     
     
    
+    
+    public ICommand createAction(){
+        
+    }
     
     public Entity createEntity(EntityType entityType, Player player){
         try {
@@ -126,12 +129,9 @@ public class Repository {
             Iterator it = entityType.getItemDrops().iterator();
             while(it.hasNext()){
                 EntityItemDrop drop = (EntityItemDrop) it.next();
-                if(drop.getDropChance() > (random.nextInt() % 11)){
-                    int amount = random.nextInt() % (drop.getMaxCount() + 1);
-                    if(amount  < drop.getMinCount()){
-                        amount = drop.getMinCount();
-                    }
-                    for(int i = 0; i < amount ; i++){
+                if(drop.roleDrop()){
+                    int count = drop.roleDropCount();
+                    for(int i = 0; i < count ; i++){
                         ItemInstance inst = Repository.Instance().createItemInstance(drop.getItem());
                         Repository.Instance().addInstanceItemToInventory(inst, entity);
                         

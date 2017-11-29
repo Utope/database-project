@@ -5,6 +5,8 @@
  */
 package core;
 
+import java.util.Random;
+
 /**
  *
  * @author robert
@@ -22,6 +24,24 @@ public class EntityItemDrop {
         this.dropChance = dropChance;
         this.maxCount = maxCount;
         this.minCount = minCount;
+    }
+    
+    public boolean roleDrop(){
+        Random random = new Random();
+        if(dropChance > (random.nextInt() % 11)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public int roleDropCount(){
+        Random random = new Random();
+        int amount = random.nextInt() % (maxCount + 1);
+        if(amount  < minCount){
+            amount = minCount;
+        }
+        return amount;
     }
 
     public int getId() {

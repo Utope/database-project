@@ -8,6 +8,7 @@ package core;
 import database.Repository;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,5 +60,17 @@ public class EntityManager {
     
     public ArrayList<EntityType> getEntityTypes(){
         return this.entityTypes;
+    }
+    
+    /*
+    below is iterator methods
+    */
+    
+    public Iterator getEntitysIterator(){
+        return entitys.iterator();
+    }
+    
+    public Iterator getEntityTypesIterator(){
+        return entityTypes.iterator();
     }
 }
