@@ -26,24 +26,34 @@ public class PlayerManager{
     }
     
     private PlayerManager(){
-        players = new ArrayList<Player>();
+        
     }
     
-    public boolean addPlayer(Player player){
-        players.add(player);
-        return true;
+    public Player createPlayer(String username, String password){
+         Player player = Repository.Instance().createPlayer(username, password);
+        if(player != null){
+            players.add(player);
+        }
+        return player;
     }
     
+    public Player findPlayerById(int id){
+        Iterator it = players.iterator();
+        while(it.hasNext()){
+            Player player = (Player) it.next();
+            if(player.getPlayerId() == id){
+                return player;
+            }
+        }
+        return null;
+    }
+        
     public ArrayList<Player> getPlayers(){
         return this.players;
     }
     
     public void init(){
-        try {
-            Repository.Instance().loadPlayers();
-        } catch (SQLException ex) {
-            Logger.getLogger(PlayerManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        players = Repository.Instance().getAllPlayers();
     }
     
     public Iterator getPlayerIterator(){

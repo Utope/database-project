@@ -6,7 +6,9 @@
 package core;
 
 import database.Repository;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -25,33 +27,55 @@ public class ItemManager {
     
     
     private ItemManager(){
-        this.items = new ArrayList<>();
-        this.item_instances = new Inventory();
+      
     }
     
     public static ItemManager Instance(){
         return ItemManager.itemManager;
     }
     
-    //control how items
-    public boolean addItem(Item item){
-        items.add(item);
-        return true;
+    public Item findItemById(int id){
+        Iterator it = items.iterator();;
+        while(it.hasNext()){
+            Item item = (Item) it.next();
+            if(item.getItemId() == id){
+                return item;
+            }
+        }
+        return null;
     }
     
-    //control how item instances are added
-    public boolean addItem_Instance(ItemInstance itemInst){
-        this.item_instances.add(itemInst);
-        return true;
+    public ItemInstance findItemInstanceById(int id){
+        Iterator it = item_instances.iterator();
+        while(it.hasNext()){
+            ItemInstance itemInstance = (ItemInstance) it.next();
+            if(itemInstance.getItemInstanceId() == id){
+                return itemInstance;
+            }
+        }
+        return null;
+    }
+    
+    public Item createItem(String name, String description){
+        Item item = Repository.Instance().createItem(name, description);
+        if(item != null){
+            items.add(item);
+        }
+        return item;
+        
+    }
+    
+    public ItemInstance createItemInstance(Item item, String timestamp){
+        ItemInstance itemInstance = Repository.Instance().createItemInstance(item, timestamp);
+        if(itemInstance != null){
+            item_instances.add(itemInstance);
+        }
+        return itemInstance;
     }
     
     public void init(){
-        try {
-            Repository.Instance().loadItems();
-            Repository.Instance().loadItemInstances();
-        } catch (SQLException ex) {
-            Logger.getLogger(ItemManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       items = Repository.Instance().getAllItems();
+       item_instances = (Inventory) Repository.Instance().getAllItemInstances();
     }
 
     public ArrayList<Item> getItems() {

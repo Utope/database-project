@@ -6,11 +6,8 @@
 package core;
 
 import database.Repository;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -27,31 +24,46 @@ public class EntityManager {
     }
     
     private EntityManager(){
-        this.entitys = new ArrayList<>();
-        this.entityTypes = new ArrayList<>();
     }
     
     public void init(){
+        entityTypes = Repository.Instance().getAllEntityTypes();
+        entitys = Repository.Instance().getAllEntitys();
+    }
     
-        try {
-            Repository.Instance().loadEntityTypes();
-            Repository.Instance().loadEntitys();
-        } catch (SQLException ex) {
-            Logger.getLogger(EntityManager.class.getName()).log(Level.SEVERE, null, ex);
+    public Entity createEntity(EntityType entityType, Player player){
+        Entity entity = Repository.Instance().createEntity(entityType, player);
+        if(entity != null){
+            entitys.add(entity);
         }
-
+        return entity;
     }
     
-    //Verification on if can add can be added here
-    public boolean addEntityType(EntityType entityType){
-        this.entityTypes.add(entityType);
-        return true;
+    //TODO
+    //public EntityType createEntityType(){
+      //  
+   // }
+    
+    public EntityType getEntityTypeById(int id){
+        Iterator it = entityTypes.iterator();
+        while(it.hasNext()){
+            EntityType entityType = (EntityType) it.next();
+            if(entityType.getId() == id){
+                return entityType;
+            }
+        }
+        return null;
     }
     
-    //Verification on if can add can be added here
-    public boolean addEntity(Entity entity){
-        this.entitys.add(entity);
-        return true;
+    public Entity getEntityById(int id){
+        Iterator it = entitys.iterator();
+        while(it.hasNext()){
+            Entity entity = (Entity) it.next();
+            if(entity.getEntityId() == id){
+                return entity;
+            }
+        }
+        return null;
     }
     
     public ArrayList<Entity> getEntitys(){

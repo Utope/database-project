@@ -6,6 +6,8 @@
 package ui;
 
 import core.Game;
+import core.Player;
+import core.PlayerManager;
 import database.Repository;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -15,6 +17,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 import javax.swing.JOptionPane;
 
 /**
@@ -128,19 +131,14 @@ public class login extends javax.swing.JFrame {
         
         username = JOptionPane.showInputDialog("Input Username");
         
-         Connection con = Repository.Instance().getConn();
-         Statement stmt = null;
-         String query = "select username from DatabaseGame.player where username=\"" + username + "\""; 
-         try {
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            
-            if(rs.next()){
-                username = null;
-            }
-        
-        } catch (SQLException e ) {
+        Iterator it = PlayerManager.Instance().getPlayerIterator();
        
+        while(it.hasNext()){
+            Player player = (Player) it.next();
+            if(username == player.getUsername()){
+                username = null;
+                break;
+            }
         }
          
         if(username == null){
