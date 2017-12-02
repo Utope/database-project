@@ -168,7 +168,7 @@ public class Repository {
             
             String query = "insert into entity "
                     + "(player_id, entity_type_id, name, health, currentHealth, attack, defense, hit) values "
-                    + "(" + ((playerId == null) ? null : "\"" + playerId + "\"") + "," 
+                    + "(" + playerId + "," 
                     + "\"" + entityType.getId() + "\"" + ","
                     + "\"" + name + "\"" + "," // add random name pick here
                     + "\"" + entityType.getBase_health() + "\"" + ","
@@ -207,7 +207,7 @@ public class Repository {
                         
                     }
                 }
-            }                      
+            }         
             return entity;
         } catch (SQLException ex) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);

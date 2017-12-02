@@ -38,7 +38,7 @@ public class PlayerManager{
     }
     
     public void createNewEntityforPlayer(Player player){
-        Repository.Instance().createEntity(EntityManager.Instance().getRandomEntityType(), player);
+        EntityManager.Instance().createEntity(EntityManager.Instance().getRandomEntityType(), player);
     }
     
     public Player findPlayerByUsername(String username){

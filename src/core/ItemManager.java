@@ -33,6 +33,8 @@ public class ItemManager {
       
     }
     
+    
+    
     public static ItemManager Instance(){
         return ItemManager.itemManager;
     }
@@ -114,6 +116,17 @@ public class ItemManager {
 
     public ArrayList<ItemInstance> getItem_instances() {
         return item_instances;
+    }
+    
+    public ArrayList<ItemInstance> getPlayerInventory(Player player){
+        ArrayList<ItemInstance> itemInstances = new ArrayList<ItemInstance>();
+        
+        for(ItemInstance itemInstance : item_instances){
+            if(itemInstance.getPlayer() != null && itemInstance.getPlayer().getPlayerId() == player.getPlayerId()){
+                itemInstances.add(itemInstance);
+            }
+        }
+        return itemInstances;
     }
     
     public ArrayList<ItemInstance> getPlayerInventorys(){

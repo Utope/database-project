@@ -8,6 +8,10 @@ package ui;
 import core.Game;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -25,8 +29,36 @@ public class MainGame extends javax.swing.JFrame {
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
     
-    public javax.swing.JLabel getTestLabel(){
-        return this.jLabel1;
+    public void setPlayerItems(String string){
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                
+                @Override
+                public void run() {
+                    playerItems.setText(string);
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MainGame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(MainGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void setText(String string){
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                
+                @Override
+                public void run() {
+                    log.append(string);
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MainGame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(MainGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -39,59 +71,26 @@ public class MainGame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        playerItems = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        log = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel2.setLayout(new java.awt.GridLayout(0, 1));
 
-        jPanel3.setLayout(new java.awt.GridLayout(0, 2));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel3.setText("jLabel3");
-        jPanel3.add(jLabel3);
+        playerItems.setColumns(20);
+        playerItems.setRows(5);
+        playerItems.setBorder(javax.swing.BorderFactory.createTitledBorder("Player Inventory"));
+        jScrollPane3.setViewportView(playerItems);
 
-        jLabel5.setText("jLabel5");
-        jPanel3.add(jLabel5);
-
-        jLabel4.setText("jLabel4");
-        jPanel3.add(jLabel4);
-
-        jLabel2.setText("jLabel2");
-        jPanel3.add(jLabel2);
-
-        jPanel2.add(jPanel3);
-
-        jPanel1.setLayout(new java.awt.GridLayout());
-
-        jList1.setBorder(javax.swing.BorderFactory.createTitledBorder("Player Inventory"));
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
-
-        jPanel1.add(jScrollPane1);
+        jPanel1.add(jScrollPane3);
 
         jPanel2.add(jPanel1);
 
@@ -99,40 +98,10 @@ public class MainGame extends javax.swing.JFrame {
 
         jPanel4.setLayout(new java.awt.GridLayout(0, 1));
 
-        jPanel5.setLayout(new java.awt.GridLayout());
-
-        jPanel7.setLayout(new java.awt.GridLayout(0, 1));
-
-        jLabel7.setText("jLabel7");
-        jPanel7.add(jLabel7);
-
-        jLabel8.setText("jLabel8");
-        jPanel7.add(jLabel8);
-
-        jLabel1.setText("jLabel1");
-        jPanel7.add(jLabel1);
-
-        jPanel5.add(jPanel7);
-
-        jPanel6.setLayout(new java.awt.GridLayout(0, 1));
-
-        jLabel9.setText("jLabel9");
-        jPanel6.add(jLabel9);
-
-        jLabel10.setText("jLabel10");
-        jPanel6.add(jLabel10);
-
-        jLabel6.setText("jLabel6");
-        jPanel6.add(jLabel6);
-
-        jPanel5.add(jPanel6);
-
-        jPanel4.add(jPanel5);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Log"));
-        jScrollPane2.setViewportView(jTextArea1);
+        log.setColumns(20);
+        log.setRows(5);
+        log.setBorder(javax.swing.BorderFactory.createTitledBorder("Log"));
+        jScrollPane2.setViewportView(log);
 
         jPanel4.add(jScrollPane2);
 
@@ -143,26 +112,12 @@ public class MainGame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea log;
+    private javax.swing.JTextArea playerItems;
     // End of variables declaration//GEN-END:variables
 }

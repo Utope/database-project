@@ -5,7 +5,6 @@
  */
 package ui;
 
-import core.ActionHandler;
 import core.EntityManager;
 import core.Game;
 import core.ItemManager;
@@ -217,7 +216,6 @@ public class login extends javax.swing.JFrame {
         ItemManager.Instance().init();
         PlayerManager.Instance().init();
         EntityManager.Instance().init();
-        ActionHandler.Instance().
         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

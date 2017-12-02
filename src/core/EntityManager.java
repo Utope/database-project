@@ -98,11 +98,14 @@ public class EntityManager {
     
     public Entity getCurrentPlayerEntity(Player player){
         for(Entity entity : this.entitys){
-            if(entity.getPlayer().getPlayerId() == player.getPlayerId()){
+            if(entity.getPlayer() != null){
+                if(entity.getPlayer().getPlayerId() == player.getPlayerId()){
                 if(entity.getCurrentHealth() > 0){
                     return entity;
                 }
             }
+            }
+            
         }
         return null;
     }

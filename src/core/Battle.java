@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,20 +24,20 @@ public class Battle {
     
     ArrayList<Action> completedActions;
     Queue<Action> queuedActions;
+    ArrayList<Action> stepActions;
     
     public Battle(Entity playerEntity, Entity computerEntity){
         this.playerEntity = playerEntity;
         this.computerEntity = computerEntity;
         completedActions = new ArrayList<>();
         queuedActions = new LinkedList<>();
+        stepActions = new ArrayList<>();
     }
     
     public boolean isBattleOver(){
-        if(computerEntity.getCurrentHealth() <= 0 || playerEntity.getCurrentHealth() <= 0){
-            return true;
-        }else{
-            return false;
-        }
+        System.out.println(computerEntity);
+        System.out.println(playerEntity);
+        return computerEntity.getCurrentHealth() <= 0 || playerEntity.getCurrentHealth() <= 0;
     }
     
     public ArrayList<Action> getCompletedActions(){
@@ -45,18 +47,24 @@ public class Battle {
     public void battleStep(){
         queuedActions.add(new ActionAttack(playerEntity, null, new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()),this.computerEntity,this));
         queuedActions.add(new ActionAttack(computerEntity, null, new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()), this.playerEntity, this));
-        pollQueuedActions();
     }
     
     public void addAction(Action action){
         queuedActions.add(action);
     }
     
+    public ArrayList<Action> getStepActions(){
+        return this.stepActions;
+    }
+    
     public void pollQueuedActions(){
         Action action = null;
         
+        stepActions.clear();
+        
         while((action = queuedActions.poll()) != null) {
             action.exectue();
+            stepActions.add(action);
             this.completedActions.add(action);
         }
     }
@@ -96,6 +104,11 @@ public class Battle {
         
         while(!battle.isBattleOver()){
             battle.battleStep();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Battle.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         for(Action action : battle.completedActions){

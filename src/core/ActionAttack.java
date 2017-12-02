@@ -51,8 +51,8 @@ public class ActionAttack extends Action {
             this.succesful = true;
             int damage = entity.getAttack() - defender.getDefense();
             
-            if(damage < 0){
-                damage = 0;
+            if(damage <= 0){
+                damage = 1;
             }
             this.damageDone = damage;
             defender.takeDamage(damage);
