@@ -12,23 +12,28 @@ import java.util.Queue;
  * @author robert
  */
 public abstract class Action{
-    int actionId;
     Entity entity; // related entity means spawned by or parent spawned by
     //Battle battle;
     Action parentAction;
     String timestamp;
+    Battle battle;
+    int actionId;
 
-    public Action(int actionId, Entity entity, Action parentAction, String timestamp) {
-        this.actionId = actionId;
+    public Action(Entity entity, Action parentAction, String timestamp, Battle battle) {
         this.entity = entity;
         this.parentAction = parentAction;
         this.timestamp = timestamp;
+        this.battle = battle;
     }
-
-    public int getActionId() {
-        return actionId;
+    
+    public int getId(){
+        return this.actionId;
     }
-
+    
+    public void setId(int id){
+        this.actionId = id;
+    }
+    
     public Entity getEntity() {
         return entity;
     }
@@ -42,5 +47,6 @@ public abstract class Action{
     }
     
     public abstract void exectue();
+    public abstract String getLog();
    
 }

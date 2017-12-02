@@ -1,10 +1,14 @@
 package database;
 
+import core.Action;
+import core.ActionAttack;
+import core.ActionDie;
+import core.ActionDropItem;
+import core.Battle;
 import core.Entity;
 import core.EntityItemDrop;
 import core.EntityManager;
 import core.EntityType;
-import core.Inventory;
 import core.Item;
 import core.ItemManager;
 import core.ItemInstance;
@@ -52,33 +56,99 @@ public class Repository {
     public Connection getConn() {
         return this.conn;
     }
-
-    public boolean doPlayerCredentialsExits(String username, String password) {
-
-        Statement stmt = null;
-        String query = "select username, password from player where username=\"" + username + "\" AND password=\"" + password + "\"";
-        try {
-            stmt = this.conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
-            if (rs.next()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-
-    /*
-        public Inventory loadPlayerInventory(String playerId){
+    
+    public void saveBattle(Battle battle){
+         try {
             
+            
+            for(Action action : battle.getCompletedActions()){
+                Statement stmt = this.conn.createStatement();
+                String query = "";
+                if(action.getParentAction() == null){
+                    query = "Insert into action (entity_id, parent_action_id, timestamp) Values ("
+                    + action.getEntity().getEntityId() + ","
+                    + null + ","
+                    + "\"" + action.getTimestamp() + "\""
+                    + ")";
+                }else{
+                    query = "Insert into action (entity_id, parent_action_id, timestamp) Values ("
+                    + action.getEntity().getEntityId() + ","
+                    + action.getParentAction().getId() + ","
+                    + "\"" + action.getTimestamp() + "\""
+                    + ")";
+                }
+                
+                stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = stmt.getGeneratedKeys();
+                rs.next();
+            
+                action.setId(rs.getInt(1));
+            }
+            
+            for(Action action : battle.getCompletedActions()){
+                Statement stmt = this.conn.createStatement();
+                String query = "";
+                
+                if(action instanceof ActionAttack){
+                    ActionAttack actionAttack = (ActionAttack) action;
+                    query = "Insert into action_attack (actionId, damage, succesful) Values ("
+                            + actionAttack.getId() + ","
+                            + actionAttack.getDamageDone() + ","
+                            + actionAttack.getSuccesful() 
+                            + ")";
+                }else if(action instanceof ActionDie){
+                    ActionDie actionDie = (ActionDie) action;
+                    query = "Insert into action_die (actionId, entity_id) Values("
+                            + actionDie.getId() + ","
+                            + actionDie.getKilledBy().getEntityId()
+                            +")";
+                }else if(action instanceof ActionDropItem){
+                    ActionDropItem actionDropItem = (ActionDropItem) action;
+                    query = "Insert into action_dropItem (actionId, item_instance_id) Values("
+                            + actionDropItem.getId() + ","
+                            + actionDropItem.getItemInstance().getItemInstanceId()
+                            + ")";
+                }
+                stmt.executeUpdate(query);
+            }
+            
+            Statement stmt = this.conn.createStatement();
+            String q= "Insert into battle (startTime, endTime) values("
+                    + "\"" + battle.getCompletedActions().get(0).getTimestamp() + "\"" + ","
+                    + "\"" + battle.getCompletedActions().get(battle.getCompletedActions().size() - 1).getTimestamp() + "\""
+                    + ")";
+           stmt.executeUpdate(q, Statement.RETURN_GENERATED_KEYS);
+           ResultSet rs = stmt.getGeneratedKeys();
+           rs.next();
+           int battleId = rs.getInt(1);
+           
+           for(Action action : battle.getCompletedActions()){
+               Statement s = this.conn.createStatement();
+               String query = "insert into battle_action (action_id, battle_id) values ("
+                       + action.getId() + ","
+                       + battleId 
+                       + ")";
+               s.executeUpdate(query);
+           }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
         }
-     */
+    }
     
     
+    public String getRandomName(){
+        try {
+            Statement stmt = this.conn.createStatement();
+            String query = "Select name from name_list ORDER BY RAND() LIMIT 1";
+            ResultSet rs = stmt.executeQuery(query);
+            rs.next();
+            return rs.getString("name");
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "FAILED TO GET NAME";
+    }
    
     
    // public ICommand createAction(){
@@ -94,12 +164,13 @@ public class Repository {
                 playerId = String.valueOf(player.getPlayerId());
             }
             
+            String name = this.getRandomName();
             
             String query = "insert into entity "
                     + "(player_id, entity_type_id, name, health, currentHealth, attack, defense, hit) values "
                     + "(" + ((playerId == null) ? null : "\"" + playerId + "\"") + "," 
                     + "\"" + entityType.getId() + "\"" + ","
-                    + "\"" + "testies" + "\"" + "," // add random name pick here
+                    + "\"" + name + "\"" + "," // add random name pick here
                     + "\"" + entityType.getBase_health() + "\"" + ","
                     + "\"" + entityType.getBase_health() + "\"" + ","
                     + "\"" + entityType.getBase_attack()+ "\"" + ","
@@ -115,8 +186,7 @@ public class Repository {
                     entityId, 
                     player, 
                     entityType, 
-                    new Inventory(), 
-                    "testies", // rand name also goes here
+                    name, // rand name also goes here
                     entityType.getBase_health(),
                     entityType.getBase_health(),
                     entityType.getBase_attack(),
@@ -154,7 +224,7 @@ public class Repository {
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
 
-            ItemInstance itemInstance = new ItemInstance(rs.getInt(1), item, timestamp);            
+            ItemInstance itemInstance = new ItemInstance(rs.getInt(1), item, timestamp, null, null);            
             return itemInstance;
         } catch (SQLException ex) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,7 +260,7 @@ public class Repository {
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
 
-            Player player = new Player(rs.getInt(1), username, password, new Inventory()); 
+            Player player = new Player(rs.getInt(1), username, password); 
             return player;
         } catch (SQLException ex) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,35 +268,35 @@ public class Repository {
        return null;
     }
     
-    public void addInstanceItemToInventory(ItemInstance itemInstance, Entity entity){
+    public ItemInstance addInstanceItemToInventory(ItemInstance itemInstance, Object inventoryHolder){
          try {
             Statement stmt = this.conn.createStatement();
-            String query = "insert into entity_inventory (item_instance_id, entity_id) values (" + "\"" + itemInstance.getItemInstanceId() + "\"" + "," + "\"" + entity.getEntityId() + "\"" + ")";
-            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
             
-            entity.getInventory().add(itemInstance);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void addInstanceItemToInventory(ItemInstance itemInstance, Player player){
-        try {
-            Statement stmt = this.conn.createStatement();
-            String query = "insert into player_inventory (item_instance_id, player_id) values (" + "\"" + itemInstance.getItemInstanceId() + "\"" + "," + "\"" + player.getPlayerId() + "\"" + ")";
-            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
-            
-            player.getInventory().add(itemInstance);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if(inventoryHolder instanceof Entity){
+                Entity entity = (Entity) inventoryHolder;
+                String query = "insert into entity_inventory (item_instance_id, entity_id) values (" + "\"" + itemInstance.getItemInstanceId() + "\"" + "," + "\"" + entity.getEntityId() + "\"" + ")";
+                stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = stmt.getGeneratedKeys();
+                rs.next();
+                // possibly do check here to see if entity was already there
+                itemInstance.setEntity(entity);
 
+            }else if(inventoryHolder instanceof Player){
+                Player player = (Player)inventoryHolder;
+                String query = "insert into player_inventory (item_instance_id, player_id) values (" + "\"" + itemInstance.getItemInstanceId() + "\"" + "," + "\"" + player.getPlayerId() + "\"" + ")";
+                stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = stmt.getGeneratedKeys();
+                rs.next();
+            // possibly do check here to see if player was already there
+                itemInstance.setPlayer(player);
+            }
+            
+           
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return null;
     }
     
     public ArrayList<EntityType> getAllEntityTypes(){
@@ -246,7 +316,7 @@ public class Repository {
                 ArrayList<EntityItemDrop> drops = new ArrayList<>();
                 
                 while(rs2.next()){
-                    Item item = ItemManager.Instance().findItemById(rs.getInt("item_id"));
+                    Item item = ItemManager.Instance().findItemById(rs2.getInt("item_id"));
                     if(item != null){
                        drops.add(new EntityItemDrop(rs2.getInt("id"), item, rs2.getInt("dropChance"), rs2.getInt("minCount"), rs2.getInt("maxCount")));
                     }else{
@@ -283,26 +353,31 @@ public class Repository {
             String query = "select id, username, password from player";
             ResultSet rs = stmt.executeQuery(query);
             
+            /*
+            SELECT timestamp
+            FROM randomTable
+            ORDER BY timestamp ASC;
+            */
             while (rs.next()) {
-                int playerId = rs.getInt("id");
+                
+                Player player = new Player(rs.getInt("id"), rs.getString("username"), rs.getString("password"));
                 
                 Statement stmt2 = this.conn.createStatement();
-                String query2 = "select item_instance_id from player_inventory where player_id=" + playerId;
+                String query2 = "select item_instance_id from player_inventory where player_id=" + player.getPlayerId();
                 ResultSet rs2 = stmt2.executeQuery(query2);
                 
-                Inventory inventory = new Inventory();
                 
                 while (rs2.next()) {
                     
-                    ItemInstance itemInstance = ItemManager.Instance().findItemInstanceById(rs.getInt("item_instance_id"));
+                    ItemInstance itemInstance = ItemManager.Instance().findItemInstanceById(rs2.getInt("item_instance_id"));
                     
                     if(itemInstance != null){
-                        inventory.add(itemInstance);
+                        itemInstance.setPlayer(player);
                     }
                     
                 }
                 
-                players.add(new Player(playerId, rs.getString("username"), rs.getString("password"), inventory));
+                players.add(player);
                
             }
         } catch (SQLException ex) {
@@ -320,45 +395,31 @@ public class Repository {
             
             while (rs.next()) {
                 
-                
-                // find the associate player can be null for monsters
-                int playerId = rs.getInt("player_id");
-                int entityId = rs.getInt("id");
-                int entityTypeId = rs.getInt("entity_type_id");
-                
                 Player player = PlayerManager.Instance().findPlayerById(rs.getInt("player_id"));
                 
-                EntityType entityType = EntityManager.Instance().getEntityTypeById(rs.getInt("entity_type_id"));
+                EntityType entityType = EntityManager.Instance().findEntityTypeById(rs.getInt("entity_type_id"));
                 
                 if(entityType == null){
                     throw new Exception("EntityType doesnt exist for entity_type_id. database is courupt or entityTypes arnt loaded");
-                }              
+                }
+                
+                Entity entity = new Entity(rs.getInt("id"), player, entityType, rs.getString("name"), rs.getInt("health"), rs.getInt("currentHealth"), rs.getInt("attack"), rs.getInt("defense"), rs.getInt("hit"));
                 
                 Statement stmt2 = this.conn.createStatement();
-                String query2 = "select item_instance_id from entity_inventory where entity_id=" + entityId;
+                String query2 = "select item_instance_id from entity_inventory where entity_id=" + entity.getEntityId();
                 ResultSet rs2 = stmt2.executeQuery(query2);
                 
-                Inventory inventory = new Inventory();
                 
                 while (rs2.next()) {
-                    ItemInstance itemInstance = ItemManager.Instance().findItemInstanceById(rs2.getInt("id"));
+                   
+                    ItemInstance itemInstance = ItemManager.Instance().findItemInstanceById(rs2.getInt("item_instance_id"));
+                    
                     if(itemInstance != null){
-                        inventory.add(itemInstance);
+                        itemInstance.setEntity(entity);
                     }
                 }
                 
-                entitys.add(new Entity(
-                        rs.getInt("id"),
-                        player,
-                        entityType,
-                        inventory,
-                        rs.getString("name"),
-                        rs.getInt("health"),
-                        rs.getInt("currenthealth"),
-                        rs.getInt("attack"),
-                        rs.getInt("defense"),
-                        rs.getInt("hit")
-                ));
+                entitys.add(entity);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
@@ -403,33 +464,92 @@ public class Repository {
                     throw new Exception("Error ItemInstance exists without existing item. Database courupt or itemTypes is not loaded");
                 }
                 
-                itemInstances.add(new ItemInstance(rs.getInt("id"), item, rs.getString("created")));
+                itemInstances.add(new ItemInstance(rs.getInt("id"), item, rs.getString("created"), null, null));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
         return itemInstances;
         
     }
+    
+    public void deleteAllItemInstancesAndClearInventoys(){
+       
+        try {
+            
+            Statement stmt2 = this.conn.createStatement();
+            String query2 = "delete from player_inventory";
+            stmt2.execute(query2);
+            
+            Statement stmt3 = this.conn.createStatement();
+            String query3 = "delete from entity_inventory";
+            stmt3.execute(query3);
+            
+            Statement stmt = this.conn.createStatement();
+            String query = "delete from item_instance";
+            stmt.execute(query);
+            
+
+            
+            ItemManager.Instance().getItem_instances().clear();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
     
     public static void main(String[] args) {
         ItemManager.Instance().init();
         PlayerManager.Instance().init();
         EntityManager.Instance().init();
         
-      Iterator typeIt =  EntityManager.Instance().getEntitys().iterator();
-        while(typeIt.hasNext()){
-            Entity e = (Entity) typeIt.next();
-            if(e.getEntityId() == 4){
-                Iterator it = e.getInventory().iterator();
-                while(it.hasNext()){
-                    ItemInstance drop = (ItemInstance) it.next();
-                    System.out.println(drop.getItem());
-                }
+        ItemManager itemManager = ItemManager.Instance();
+        EntityManager entityManager = EntityManager.Instance();
+        PlayerManager playerManager = PlayerManager.Instance();
+        
+        Repository repo = Repository.Instance();
+        
+        EntityManager.Instance().createEntity(
+                EntityManager.Instance().findEntityTypeByName("Goblin"), 
+                null
+        );
+        
+        
+        
+        ArrayList<Entity> entitys = EntityManager.Instance().getEntitys();
+        for(Entity entity : entitys){
+            System.out.println(entity);
+            
+            ArrayList<ItemInstance> itemInstances = ItemManager.Instance().getEntityInventory(entityManager.findEntityById(entity.getEntityId()));
+            for(ItemInstance inst : itemInstances){
+                System.out.println(inst);
             }
         }
+        
+        
+        
+      // itemManager.setItemInstanceOwner(
+        //      itemManager.createItemInstance(itemManager.findItemByName("Bread"), itemManager.getTimestamp()), 
+          //    entityManager.findEntityById(3));
+        
+        //ItemManager.Instance().createItemInstance(ItemManager.Instance().findItemByName("Bread"), new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
+       
+        
+        
+
+        
+       // ItemInstance itemInstance = itemManager.findItemInstanceById(12);
+       // System.out.println(itemInstance.getItemInstanceId());
+        
+        
+
+        
+        
         //Iterator it = null;
         /*
 

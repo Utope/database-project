@@ -7,12 +7,10 @@ public class Player {
     private int playerId;
     private String username;
     private String password;
-    private Inventory inventory;
 	
-    public Player(int playerId, String username,String password, Inventory inventory){
+    public Player(int playerId, String username,String password){
             this.playerId = playerId;
             this.username = username;
-            this.inventory = inventory;
             this.password = password;
     }
 
@@ -31,15 +29,13 @@ public class Player {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public Inventory getInventory() {
-        return inventory;
+    
+    public String getPassword(){
+        return this.password;
     }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    
+    public String toString(){
+        return "[Player " + this.playerId + ", username=" + this.username + "]";
     }
-
-	
 	
 }

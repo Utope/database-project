@@ -5,7 +5,10 @@
  */
 package ui;
 
+import core.ActionHandler;
+import core.EntityManager;
 import core.Game;
+import core.ItemManager;
 import core.Player;
 import core.PlayerManager;
 import database.Repository;
@@ -132,10 +135,10 @@ public class login extends javax.swing.JFrame {
         username = JOptionPane.showInputDialog("Input Username");
         
         Iterator it = PlayerManager.Instance().getPlayerIterator();
-       
+
         while(it.hasNext()){
-            Player player = (Player) it.next();
-            if(username == player.getUsername()){
+            Player p = (Player) it.next();
+            if(username.equals(p.getUsername())){
                 username = null;
                 break;
             }
@@ -149,24 +152,15 @@ public class login extends javax.swing.JFrame {
              this.createAccountButtonActionPerformed(null);
         }else{
             password = JOptionPane.showInputDialog("Input password");
-            stmt = null;
-            query = "insert into DatabaseGame.player (username, password) VALUES (" + "\"" + username + "\"" + ", " + "\"" + password + "\"" + ")"; 
             
+            PlayerManager.Instance().createPlayer(username, password);
             
-            try {
-            stmt = con.createStatement();
-            int count = stmt.executeUpdate(query);
-            
-            if(count > 0){
-                JOptionPane.showMessageDialog(
+           
+            JOptionPane.showMessageDialog(
                         null,
-                        "Creation Success!");
-            }
-        
-        } catch (SQLException e ) {
-       
-        }
-            
+                        "Creation Success!"
+            );
+                      
             
             
         }
@@ -176,20 +170,30 @@ public class login extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
               String username = usernameTextField.getText();
               String password = passwordTextField.getText();
-                
-               if(!Repository.Instance().doPlayerCredentialsExits(username, password)){
+              
+              Player player = PlayerManager.Instance().findPlayerByUsername(username);
+              
+              if(player == null){
                    JOptionPane.showMessageDialog(
                         null,
-                        "Login error", "Error",
+                        "Login error username doesnt exits", "Error",
                         JOptionPane.ERROR_MESSAGE);
-               }else{
-                JOptionPane.showMessageDialog(
+              }else {
+                  if(player.getPassword().equals(password)){
+                      JOptionPane.showMessageDialog(
                         null,
                         "Login Success!");
-                Thread thread = new Thread(new Game(username, password));
-                thread.start();
-            }               
-                  closeWindow();
+                        Thread thread = new Thread(new Game(player));
+                        thread.start();
+                        closeWindow();
+                        return;
+                  }else{
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "Incorrect Password", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                  }
+              }
             
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -210,6 +214,10 @@ public class login extends javax.swing.JFrame {
     
     public static void main(String[] args){
          
+        ItemManager.Instance().init();
+        PlayerManager.Instance().init();
+        EntityManager.Instance().init();
+        ActionHandler.Instance().
         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

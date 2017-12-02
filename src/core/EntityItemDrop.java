@@ -64,5 +64,10 @@ public class EntityItemDrop {
         return maxCount;
     }
     
+    public String toString(){
+        
+        return "[" + getId() + "," + item.getName() + "," + dropChance + ", " + minCount + ", " + maxCount + "]"; 
+    }
+    
     
 }

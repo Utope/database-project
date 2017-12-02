@@ -8,6 +8,7 @@ package core;
 import database.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  *
@@ -44,7 +45,18 @@ public class EntityManager {
       //  
    // }
     
-    public EntityType getEntityTypeById(int id){
+    public EntityType findEntityTypeByName(String name){
+        Iterator it = entityTypes.iterator();
+        while(it.hasNext()){
+            EntityType entityType = (EntityType) it.next();
+            if(entityType.getName().equals(name)){
+                return entityType;
+            }
+        }
+        return null;
+    }
+    
+    public EntityType findEntityTypeById(int id){
         Iterator it = entityTypes.iterator();
         while(it.hasNext()){
             EntityType entityType = (EntityType) it.next();
@@ -55,7 +67,7 @@ public class EntityManager {
         return null;
     }
     
-    public Entity getEntityById(int id){
+    public Entity findEntityById(int id){
         Iterator it = entitys.iterator();
         while(it.hasNext()){
             Entity entity = (Entity) it.next();
@@ -64,6 +76,12 @@ public class EntityManager {
             }
         }
         return null;
+    }
+    
+    public EntityType getRandomEntityType(){
+        Random rand = new Random();
+        rand.setSeed(System.currentTimeMillis());
+        return this.entityTypes.get(rand.nextInt(entityTypes.size()));
     }
     
     public ArrayList<Entity> getEntitys(){
@@ -77,6 +95,17 @@ public class EntityManager {
     /*
     below is iterator methods
     */
+    
+    public Entity getCurrentPlayerEntity(Player player){
+        for(Entity entity : this.entitys){
+            if(entity.getPlayer().getPlayerId() == player.getPlayerId()){
+                if(entity.getCurrentHealth() > 0){
+                    return entity;
+                }
+            }
+        }
+        return null;
+    }
     
     public Iterator getEntitysIterator(){
         return entitys.iterator();

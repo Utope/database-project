@@ -37,6 +37,21 @@ public class PlayerManager{
         return player;
     }
     
+    public void createNewEntityforPlayer(Player player){
+        Repository.Instance().createEntity(EntityManager.Instance().getRandomEntityType(), player);
+    }
+    
+    public Player findPlayerByUsername(String username){
+        Iterator it = players.iterator();
+        while(it.hasNext()){
+            Player player = (Player) it.next();
+            if(player.getUsername().equals(username)){
+                return player;
+            }
+        }
+        return null;
+    }
+    
     public Player findPlayerById(int id){
         Iterator it = players.iterator();
         while(it.hasNext()){

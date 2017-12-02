@@ -9,8 +9,11 @@ import database.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +26,7 @@ public class ItemManager {
     private static ItemManager itemManager = new ItemManager();
         
     private ArrayList<Item> items;
-    private Inventory item_instances;
+    private ArrayList<ItemInstance> item_instances;
     
     
     private ItemManager(){
@@ -34,8 +37,25 @@ public class ItemManager {
         return ItemManager.itemManager;
     }
     
+    public void setItemInstanceOwner(ItemInstance itemInstance, Object inventoryHolder){
+       Repository.Instance().addInstanceItemToInventory(itemInstance, inventoryHolder);
+    }
+    
+    public Item findItemByName(String name){
+        for(Item item : this.items){
+            if(item.getName().equals(name)){
+                return item;
+            }
+        }
+        return null;
+    }
+    
+    public String getTimestamp(){
+        return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+    }
+    
     public Item findItemById(int id){
-        Iterator it = items.iterator();;
+        Iterator it = items.iterator();
         while(it.hasNext()){
             Item item = (Item) it.next();
             if(item.getItemId() == id){
@@ -46,9 +66,7 @@ public class ItemManager {
     }
     
     public ItemInstance findItemInstanceById(int id){
-        Iterator it = item_instances.iterator();
-        while(it.hasNext()){
-            ItemInstance itemInstance = (ItemInstance) it.next();
+        for (ItemInstance itemInstance : item_instances) {
             if(itemInstance.getItemInstanceId() == id){
                 return itemInstance;
             }
@@ -65,6 +83,18 @@ public class ItemManager {
         
     }
     
+    public ArrayList<ItemInstance> getEntityInventory(Entity entity){
+        ArrayList<ItemInstance> itemInstances = new ArrayList<ItemInstance>();
+        
+        for(ItemInstance itemInstance : this.item_instances){
+            Entity ent = itemInstance.getEntity();
+            if(ent.getEntityId() == entity.getEntityId()){
+                    itemInstances.add(itemInstance);
+                }
+            }
+        return itemInstances;
+    }
+    
     public ItemInstance createItemInstance(Item item, String timestamp){
         ItemInstance itemInstance = Repository.Instance().createItemInstance(item, timestamp);
         if(itemInstance != null){
@@ -75,97 +105,50 @@ public class ItemManager {
     
     public void init(){
        items = Repository.Instance().getAllItems();
-       item_instances = (Inventory) Repository.Instance().getAllItemInstances();
+       item_instances =  Repository.Instance().getAllItemInstances();
     }
 
     public ArrayList<Item> getItems() {
         return items;
     }
 
-    public Inventory getItem_instances() {
+    public ArrayList<ItemInstance> getItem_instances() {
         return item_instances;
     }
-
-    /*
-    All Iterators and methods to get iterators are below here
-    */
     
-    public Iterator instanceIteratorName(String name){
-        return this.item_instances.ItemNameIterator(name);
-    }
-    
-    public Iterator instanceIteratorItemInstanceTypeId(int id){
-        return this.item_instances.ItemIdIterator(id);
-    }
-    
-    public class EntityInstanceItemsIterator implements Iterator{
+    public ArrayList<ItemInstance> getPlayerInventorys(){
+        ArrayList<ItemInstance> itemInstances = new ArrayList<ItemInstance>();
         
-        int index;
-        
-        @Override
-        public boolean hasNext() {
-            while(index  < item_instances.size()){
-                ItemInstance itemInstance = item_instances.get(index);
-                boolean temp = false;
-                
-                Iterator it = EntityManager.Instance().getEntitysIterator();
-                while(it.hasNext()){
-                    Entity entity = (Entity) it.next();
-                    if(entity.getInventory().contains(itemInstance)){
-                        temp = true;
-                    }
-                }
-                
-                if(temp){
-                    return true;
-                }else{
-                    index++;
-                }
+        for(ItemInstance itemInstance : item_instances){
+            if(itemInstance.getPlayer() != null){
+                itemInstances.add(itemInstance);
             }
-            
-            return false;
         }
-
-        @Override
-        public Object next() {
-            return item_instances.get(index++);
-        }
+        return itemInstances;
     }
     
-    public class PlayerInstanceItemsIterator implements Iterator{
+    public ArrayList<ItemInstance> getEntityInventorys(){
+        ArrayList<ItemInstance> itemInstances = new ArrayList<ItemInstance>();
         
-        int index;
-        
-        @Override
-        public boolean hasNext() {
-            while(index  < item_instances.size()){
-                ItemInstance itemInstance = item_instances.get(index);
-                boolean temp = false;
-                
-                Iterator it = PlayerManager.Instance().getPlayerIterator();
-                while(it.hasNext()){
-                    Player player = (Player) it.next();
-                    if(player.getInventory().contains(itemInstance)){
-                        temp = true;
-                    }
-                }
-                
-                if(temp){
-                    return true;
-                }else{
-                    index++;
-                }
+        for(ItemInstance itemInstance : item_instances){
+            if(itemInstance.getEntity() != null){
+                itemInstances.add(itemInstance);
             }
-            return false;
         }
-
-        @Override
-        public Object next() {
-           return item_instances.get(index);
-        }
-        
+        return itemInstances;
     }
-    
+
+       public ArrayList<ItemInstance> getAllInventorys(){
+        ArrayList<ItemInstance> itemInstances = new ArrayList<ItemInstance>();
+        
+        for(ItemInstance itemInstance : item_instances){
+            if(itemInstance.getEntity() != null || itemInstance.getPlayer() != null){
+                itemInstances.add(itemInstance);
+            }
+        }
+        return itemInstances;
+    }
+       
     
    
 }
