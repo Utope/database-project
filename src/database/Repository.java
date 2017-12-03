@@ -136,6 +136,30 @@ public class Repository {
         }
     }
     
+    public void createName(String name){
+        try {
+            Statement stmt = this.conn.createStatement();
+            String query = "insert into name_list (name) Values ( \""+ name + "\")";
+            stmt.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ArrayList<String> getAllRandomNames(){
+        ArrayList<String> names = new ArrayList<>();
+        try {
+            Statement stmt = this.conn.createStatement();
+            String query = "Select name from name_list";
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()){
+                names.add(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return names;
+    }
     
     public String getRandomName(){
         try {
@@ -343,8 +367,7 @@ public class Repository {
         }
         return entityTypes;
     }
-    
-    
+       
     public ArrayList<Player> getAllPlayers(){
         ArrayList<Player> players = new ArrayList<>();
         try {
@@ -500,8 +523,7 @@ public class Repository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-    
+    } 
     
     public static void main(String[] args) {
         ItemManager.Instance().init();

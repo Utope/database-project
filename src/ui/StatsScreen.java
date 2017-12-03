@@ -5,8 +5,16 @@
  */
 package ui;
 
+import core.Entity;
+import core.EntityType;
+import core.Item;
+import core.ItemInstance;
+import core.Player;
+import database.Repository;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,7 +28,7 @@ public class StatsScreen extends javax.swing.JFrame {
     public StatsScreen() {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
     }
 
     /**
@@ -32,21 +40,254 @@ public class StatsScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jOptionPane1 = new javax.swing.JOptionPane();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        getPlayersButton = new javax.swing.JButton();
+        getAllItemTypesButton = new javax.swing.JButton();
+        totalEntityCountButton = new javax.swing.JButton();
+        totalItemInstanceButton = new javax.swing.JButton();
+        totalCountForSpecificEntity = new javax.swing.JButton();
+        getAllRandomNamesButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        newRandomNameButton = new javax.swing.JButton();
+        addNewItemType = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        getPlayersButton.setText("Get Players");
+        getPlayersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getPlayersButtonActionPerformed(evt);
+            }
+        });
+
+        getAllItemTypesButton.setText("Get Item Types");
+        getAllItemTypesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getAllItemTypesButtonActionPerformed(evt);
+            }
+        });
+
+        totalEntityCountButton.setText("Get Total Entity Count");
+        totalEntityCountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalEntityCountButtonActionPerformed(evt);
+            }
+        });
+
+        totalItemInstanceButton.setText("Get total Item Instance Count");
+        totalItemInstanceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalItemInstanceButtonActionPerformed(evt);
+            }
+        });
+
+        totalCountForSpecificEntity.setText("Get total Count for specific EntityType");
+        totalCountForSpecificEntity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalCountForSpecificEntityActionPerformed(evt);
+            }
+        });
+
+        getAllRandomNamesButton.setText("Get all Random Names");
+        getAllRandomNamesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getAllRandomNamesButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(getAllItemTypesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(getPlayersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalEntityCountButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalItemInstanceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalCountForSpecificEntity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(getAllRandomNamesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(getPlayersButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getAllItemTypesButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(totalEntityCountButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(totalItemInstanceButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(totalCountForSpecificEntity)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getAllRandomNamesButton)
+                .addContainerGap(81, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("General Stats", jPanel1);
+
+        newRandomNameButton.setText("Add new Random Name");
+        newRandomNameButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newRandomNameButtonActionPerformed(evt);
+            }
+        });
+
+        addNewItemType.setText("Add new Item Type");
+        addNewItemType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNewItemTypeActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(newRandomNameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addNewItemType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(264, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(newRandomNameButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addNewItemType)
+                .addContainerGap(205, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Admin Options", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void getPlayersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getPlayersButtonActionPerformed
+        ArrayList<Player> players = Repository.Instance().getAllPlayers();
+        String playerString = "";
+
+        for (Player player : players) {
+            playerString += player.getUsername() + "\n";
+        }
+
+        JOptionPane.showMessageDialog(rootPane, playerString);
+
+    }//GEN-LAST:event_getPlayersButtonActionPerformed
+
+    private void getAllItemTypesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getAllItemTypesButtonActionPerformed
+        ArrayList<Item> items = Repository.Instance().getAllItems();
+        String itemString = "";
+        for (Item item : items) {
+            itemString += item.getName() + "\n";
+        }
+
+        JOptionPane.showMessageDialog(rootPane, itemString);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_getAllItemTypesButtonActionPerformed
+
+    private void totalItemInstanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalItemInstanceButtonActionPerformed
+        ArrayList<ItemInstance> itemInstances = Repository.Instance().getAllItemInstances();
+        JOptionPane.showMessageDialog(rootPane, itemInstances.size());
+    }//GEN-LAST:event_totalItemInstanceButtonActionPerformed
+
+    private void totalEntityCountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalEntityCountButtonActionPerformed
+        ArrayList<Entity> entitys = Repository.Instance().getAllEntitys();
+        JOptionPane.showMessageDialog(rootPane, entitys.size());
+    }//GEN-LAST:event_totalEntityCountButtonActionPerformed
+
+    private void totalCountForSpecificEntityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalCountForSpecificEntityActionPerformed
+        ArrayList<EntityType> types = Repository.Instance().getAllEntityTypes();
+        ArrayList<Object> entityTypes = new ArrayList<>();
+        
+        for(EntityType type : types){
+            entityTypes.add(type.getName());
+        }
+
+        String s = (String) JOptionPane.showInputDialog(
+                this.rootPane,
+                "Select Entity Type",
+                "Type Count",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                entityTypes.toArray(),
+                null);
+
+//If a string was returned, say so.
+        if ((s != null) && (s.length() > 0)) {
+            
+            int count = 0;
+            for(Entity entity : Repository.Instance().getAllEntitys()){
+                if(entity.getEntityType().getName().equals(s)){
+                    count++;
+                }
+            }
+            
+            JOptionPane.showMessageDialog(rootPane, "There are " + count + " " + s + "(s)");
+        }else{
+             JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_totalCountForSpecificEntityActionPerformed
+
+    private void newRandomNameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newRandomNameButtonActionPerformed
+        ArrayList<String> names = Repository.Instance().getAllRandomNames();
+        String newRandomName = JOptionPane.showInputDialog("Input new Random name");
+        if(names.contains(newRandomName) || newRandomName == null){
+            JOptionPane.showMessageDialog(null,"name already exits in database or name input is null", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            Repository.Instance().createName(newRandomName);
+            JOptionPane.showMessageDialog(rootPane, "New Random name " + newRandomName + " created!");
+        }
+    }//GEN-LAST:event_newRandomNameButtonActionPerformed
+
+    private void getAllRandomNamesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getAllRandomNamesButtonActionPerformed
+        ArrayList<String> names = Repository.Instance().getAllRandomNames();
+        String nameString = "";
+        for(String name : names){
+            nameString += name + "\n";
+        }
+        JOptionPane.showMessageDialog(rootPane, nameString);
+    }//GEN-LAST:event_getAllRandomNamesButtonActionPerformed
+
+    private void addNewItemTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewItemTypeActionPerformed
+        String itemName = JOptionPane.showInputDialog("Input new Item Name");
+        String itemDescription= JOptionPane.showInputDialog("Input new Item Description");
+        
+        ArrayList<Item> items = Repository.Instance().getAllItems();
+        for(Item item : items){
+            if(item.getName().equals(itemName)){
+                JOptionPane.showMessageDialog(null,"name already exits in database or name input is null", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
+        Repository.Instance().createItem(itemName, itemDescription);
+        JOptionPane.showMessageDialog(rootPane, "New Item created!");
+    }//GEN-LAST:event_addNewItemTypeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -84,5 +325,17 @@ public class StatsScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addNewItemType;
+    private javax.swing.JButton getAllItemTypesButton;
+    private javax.swing.JButton getAllRandomNamesButton;
+    private javax.swing.JButton getPlayersButton;
+    private javax.swing.JOptionPane jOptionPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton newRandomNameButton;
+    private javax.swing.JButton totalCountForSpecificEntity;
+    private javax.swing.JButton totalEntityCountButton;
+    private javax.swing.JButton totalItemInstanceButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,6 +10,7 @@ import core.Game;
 import core.ItemManager;
 import core.Player;
 import core.PlayerManager;
+import core.StatsScreenMain;
 import database.Repository;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -152,6 +153,8 @@ public class login extends javax.swing.JFrame {
         }else{
             password = JOptionPane.showInputDialog("Input password");
             
+            
+            
             PlayerManager.Instance().createPlayer(username, password);
             
            
@@ -159,8 +162,6 @@ public class login extends javax.swing.JFrame {
                         null,
                         "Creation Success!"
             );
-                      
-            
             
         }
         
@@ -182,9 +183,18 @@ public class login extends javax.swing.JFrame {
                       JOptionPane.showMessageDialog(
                         null,
                         "Login Success!");
+                      
+                      if(player.getUsername().equals("root")){
+                        Thread thread = new Thread(new StatsScreenMain());
+                        thread.start();
+                        closeWindow();
+                      }else{
                         Thread thread = new Thread(new Game(player));
                         thread.start();
                         closeWindow();
+                      }
+                      
+
                         return;
                   }else{
                     JOptionPane.showMessageDialog(
