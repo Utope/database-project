@@ -49,9 +49,16 @@ public class StatsScreen extends javax.swing.JFrame {
         totalItemInstanceButton = new javax.swing.JButton();
         totalCountForSpecificEntity = new javax.swing.JButton();
         getAllRandomNamesButton = new javax.swing.JButton();
+        numberOfActionsButton = new javax.swing.JButton();
+        listAllEntityTypesButton = new javax.swing.JButton();
+        getPlayerInventoryButton = new javax.swing.JButton();
+        getEntityTypeDropsButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         newRandomNameButton = new javax.swing.JButton();
         addNewItemType = new javax.swing.JButton();
+        newEntityTypeButton = new javax.swing.JButton();
+        deletePlayerInventoryButton = new javax.swing.JButton();
+        addDropToEntityType = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,6 +104,34 @@ public class StatsScreen extends javax.swing.JFrame {
             }
         });
 
+        numberOfActionsButton.setText("Get Number of actions");
+        numberOfActionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numberOfActionsButtonActionPerformed(evt);
+            }
+        });
+
+        listAllEntityTypesButton.setText("List all EntityTypes");
+        listAllEntityTypesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listAllEntityTypesButtonActionPerformed(evt);
+            }
+        });
+
+        getPlayerInventoryButton.setText("Get Player Inventory");
+        getPlayerInventoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getPlayerInventoryButtonActionPerformed(evt);
+            }
+        });
+
+        getEntityTypeDropsButton.setText("Get EntityType drops");
+        getEntityTypeDropsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getEntityTypeDropsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -109,16 +144,26 @@ public class StatsScreen extends javax.swing.JFrame {
                     .addComponent(totalEntityCountButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalItemInstanceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalCountForSpecificEntity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(getAllRandomNamesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(165, Short.MAX_VALUE))
+                    .addComponent(getAllRandomNamesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(numberOfActionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listAllEntityTypesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(getPlayerInventoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(getEntityTypeDropsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(getPlayersButton)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(getPlayersButton)
+                    .addComponent(getPlayerInventoryButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(getAllItemTypesButton)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(getAllItemTypesButton)
+                    .addComponent(getEntityTypeDropsButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalEntityCountButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -127,7 +172,11 @@ public class StatsScreen extends javax.swing.JFrame {
                 .addComponent(totalCountForSpecificEntity)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(getAllRandomNamesButton)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(numberOfActionsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(listAllEntityTypesButton)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("General Stats", jPanel1);
@@ -146,6 +195,27 @@ public class StatsScreen extends javax.swing.JFrame {
             }
         });
 
+        newEntityTypeButton.setText("Add new Entity Type");
+        newEntityTypeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newEntityTypeButtonActionPerformed(evt);
+            }
+        });
+
+        deletePlayerInventoryButton.setText("Delete player inventory");
+        deletePlayerInventoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deletePlayerInventoryButtonActionPerformed(evt);
+            }
+        });
+
+        addDropToEntityType.setText("Add drop to EntityType");
+        addDropToEntityType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addDropToEntityTypeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -154,8 +224,11 @@ public class StatsScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(newRandomNameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addNewItemType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(264, Short.MAX_VALUE))
+                    .addComponent(addNewItemType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newEntityTypeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deletePlayerInventoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addDropToEntityType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(416, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +237,13 @@ public class StatsScreen extends javax.swing.JFrame {
                 .addComponent(newRandomNameButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addNewItemType)
-                .addContainerGap(205, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(newEntityTypeButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deletePlayerInventoryButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addDropToEntityType)
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Admin Options", jPanel2);
@@ -289,6 +368,254 @@ public class StatsScreen extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(rootPane, "New Item created!");
     }//GEN-LAST:event_addNewItemTypeActionPerformed
 
+    private void numberOfActionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberOfActionsButtonActionPerformed
+        
+    }//GEN-LAST:event_numberOfActionsButtonActionPerformed
+
+    private void newEntityTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntityTypeButtonActionPerformed
+        
+        ArrayList<EntityType> types = Repository.Instance().getAllEntityTypes();
+        
+        String name = JOptionPane.showInputDialog("Input new EntityType name");
+        
+        if(name == null){
+            JOptionPane.showMessageDialog(null,"name is null", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        for(EntityType type : types){
+            if(type.getName().equals(name)){
+                JOptionPane.showMessageDialog(null,"name already exits in database", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
+        String description = JOptionPane.showInputDialog("Input EntityType Description");
+        
+        try{
+        int atk = Integer.valueOf(JOptionPane.showInputDialog("Input EntityType attack"));
+        int def = Integer.valueOf(JOptionPane.showInputDialog("Input EntityType defense"));
+        int hit = Integer.valueOf(JOptionPane.showInputDialog("Input EntityType hit"));
+        int health = Integer.valueOf(JOptionPane.showInputDialog("Input EntityType health"));
+        
+        Repository.Instance().createNewEntityType(name, description,atk , def, hit, health);
+        JOptionPane.showMessageDialog(rootPane, "New EntityType created!");
+        
+        }catch(NumberFormatException e){
+             JOptionPane.showMessageDialog(null,"field is not parseable or null", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        
+    }//GEN-LAST:event_newEntityTypeButtonActionPerformed
+
+    private void addDropToEntityTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDropToEntityTypeActionPerformed
+        ArrayList<Item> itemTypes = Repository.Instance().getAllItems();
+        ArrayList<Object> itemTypeNames = new ArrayList<>();
+        
+        Item linkingItem = null;
+        EntityType linkingType = null;
+        
+        for(Item item : itemTypes){
+            itemTypeNames.add(item.getName());
+        }
+        
+         String s = (String) JOptionPane.showInputDialog(
+                this.rootPane,
+                "Select Item Type",
+                "Type Count",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                itemTypeNames.toArray(),
+                null);
+         
+         if((s != null) && (s.length() > 0)) {
+            for(Item item : itemTypes){
+                if(item.getName().equals(s)){
+                    linkingItem = item;
+                    break;
+                }
+            }
+         }
+            
+            
+            ArrayList<EntityType> types = Repository.Instance().getAllEntityTypes();
+            ArrayList<Object> entityTypeString = new ArrayList<>();
+            
+            for(EntityType type : types){
+                entityTypeString.add(type.getName());
+            }
+            
+             String q = (String) JOptionPane.showInputDialog(
+                this.rootPane,
+                "Select EntityType",
+                "Type Count",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                entityTypeString.toArray(),
+                null);
+           
+           if((q != null) && (q.length() > 0)) {
+            for(EntityType et : types){
+                if(et.getName().equals(q)){
+                    linkingType = et;
+                    break;
+                }
+            }
+           
+            
+            try{
+                int dropChance = Integer.valueOf(JOptionPane.showInputDialog("Input drop chance"));
+                int minCount = Integer.valueOf(JOptionPane.showInputDialog("Min Items dropped"));
+                int maxCount = Integer.valueOf(JOptionPane.showInputDialog("Input Max items dropped"));
+                
+                Repository.Instance().addEntityDropToEntityType(linkingItem, linkingType, dropChance, minCount, maxCount);
+                
+                JOptionPane.showMessageDialog(rootPane, "Item drop created");
+                
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+            
+        }else{
+             JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addDropToEntityTypeActionPerformed
+
+    private void deletePlayerInventoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePlayerInventoryButtonActionPerformed
+        ArrayList<Player> players = Repository.Instance().getAllPlayers();
+        ArrayList<Object> playerNames = new ArrayList<>();
+        
+        for(Player player : players){
+            playerNames.add(player.getUsername());
+        }
+
+        String s = (String) JOptionPane.showInputDialog(
+                this.rootPane,
+                "Select Player",
+                "Type Count",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                playerNames.toArray(),
+                null);
+
+//If a string was returned, say so.
+        if ((s != null) && (s.length() > 0)) {
+            
+            int count = 0;
+            for(Player player : players){
+                if(player.getUsername().equals(s)){
+                    Repository.Instance().executeQuery("delete from player_inventory where player_inventory.player_id="+player.getPlayerId());
+                }
+            }
+            
+            JOptionPane.showMessageDialog(rootPane, "Player Inventory deleted!");
+        }else{
+             JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deletePlayerInventoryButtonActionPerformed
+
+    private void listAllEntityTypesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listAllEntityTypesButtonActionPerformed
+            ArrayList<EntityType> types = Repository.Instance().getAllEntityTypes();
+            String typeString = "";
+            
+            for(EntityType type : types){
+                typeString += type.getName() + "\n";
+            }
+            JOptionPane.showMessageDialog(rootPane, typeString);
+            
+    }//GEN-LAST:event_listAllEntityTypesButtonActionPerformed
+
+    private void getPlayerInventoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getPlayerInventoryButtonActionPerformed
+        ArrayList<Player> players = Repository.Instance().getAllPlayers();
+        ArrayList<Object> playerNames = new ArrayList<>();
+        
+        for(Player player : players){
+            playerNames.add(player.getUsername());
+        }
+
+        String s = (String) JOptionPane.showInputDialog(
+                this.rootPane,
+                "Select Player",
+                "Type Count",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                playerNames.toArray(),
+                null);
+        
+        if ((s != null) && (s.length() > 0)) {
+            
+            int count = 0;
+            for(Player player : players){
+                if(player.getUsername().equals(s)){
+                    String inventoryItems = "";
+                    ArrayList<String> invItemsList = Repository.Instance().getPlayerInventory(player);
+                    for(String string : invItemsList){
+                        inventoryItems+=string + "\n";
+                    }
+                    JOptionPane.showMessageDialog(rootPane, inventoryItems);
+                    return;
+                }
+            }
+            
+            
+        }else{
+             JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_getPlayerInventoryButtonActionPerformed
+
+    private void getEntityTypeDropsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getEntityTypeDropsButtonActionPerformed
+            ArrayList<EntityType> types = Repository.Instance().getAllEntityTypes();
+            ArrayList<Object> entityTypeString = new ArrayList<>();
+            
+            for(EntityType type : types){
+                entityTypeString.add(type.getName());
+            }
+            
+             String q = (String) JOptionPane.showInputDialog(
+                this.rootPane,
+                "Select EntityType",
+                "Type Count",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                entityTypeString.toArray(),
+                null);
+             
+            if((q != null) && (q.length() > 0)) {
+            for(EntityType et : types){
+                if(et.getName().equals(q)){
+                    ArrayList<String> items = Repository.Instance().getEntityTypeDrops(et);
+                    String itemList = "";
+                    for(String string : items){
+                        itemList+= string + "\n";
+                    }
+                    
+                    JOptionPane.showMessageDialog(rootPane, itemList);
+
+                }
+            }
+         }else{
+                JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+             
+    }//GEN-LAST:event_getEntityTypeDropsButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -325,15 +652,22 @@ public class StatsScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addDropToEntityType;
     private javax.swing.JButton addNewItemType;
+    private javax.swing.JButton deletePlayerInventoryButton;
     private javax.swing.JButton getAllItemTypesButton;
     private javax.swing.JButton getAllRandomNamesButton;
+    private javax.swing.JButton getEntityTypeDropsButton;
+    private javax.swing.JButton getPlayerInventoryButton;
     private javax.swing.JButton getPlayersButton;
     private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton listAllEntityTypesButton;
+    private javax.swing.JButton newEntityTypeButton;
     private javax.swing.JButton newRandomNameButton;
+    private javax.swing.JButton numberOfActionsButton;
     private javax.swing.JButton totalCountForSpecificEntity;
     private javax.swing.JButton totalEntityCountButton;
     private javax.swing.JButton totalItemInstanceButton;

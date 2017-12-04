@@ -62,8 +62,15 @@
                           <Component id="totalItemInstanceButton" max="32767" attributes="0"/>
                           <Component id="totalCountForSpecificEntity" max="32767" attributes="0"/>
                           <Component id="getAllRandomNamesButton" max="32767" attributes="0"/>
+                          <Component id="numberOfActionsButton" max="32767" attributes="0"/>
+                          <Component id="listAllEntityTypesButton" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="165" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="getPlayerInventoryButton" max="32767" attributes="0"/>
+                          <Component id="getEntityTypeDropsButton" pref="286" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -71,9 +78,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="getPlayersButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="getPlayersButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="getPlayerInventoryButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="getAllItemTypesButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="getAllItemTypesButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="getEntityTypeDropsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="totalEntityCountButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -82,7 +95,11 @@
                       <Component id="totalCountForSpecificEntity" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="getAllRandomNamesButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="81" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="numberOfActionsButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="listAllEntityTypesButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -136,6 +153,38 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getAllRandomNamesButtonActionPerformed"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JButton" name="numberOfActionsButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Get Number of actions"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numberOfActionsButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="listAllEntityTypesButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="List all EntityTypes"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listAllEntityTypesButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="getPlayerInventoryButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Get Player Inventory"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getPlayerInventoryButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="getEntityTypeDropsButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Get EntityType drops"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getEntityTypeDropsButtonActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel2">
@@ -155,8 +204,11 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="newRandomNameButton" max="32767" attributes="0"/>
                           <Component id="addNewItemType" max="32767" attributes="0"/>
+                          <Component id="newEntityTypeButton" max="32767" attributes="0"/>
+                          <Component id="deletePlayerInventoryButton" max="32767" attributes="0"/>
+                          <Component id="addDropToEntityType" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="264" max="32767" attributes="0"/>
+                      <EmptySpace pref="416" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -167,7 +219,13 @@
                       <Component id="newRandomNameButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="addNewItemType" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="205" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="newEntityTypeButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="deletePlayerInventoryButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="addDropToEntityType" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="120" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -187,6 +245,30 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addNewItemTypeActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="newEntityTypeButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Add new Entity Type"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newEntityTypeButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="deletePlayerInventoryButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Delete player inventory"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deletePlayerInventoryButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="addDropToEntityType">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Add drop to EntityType"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addDropToEntityTypeActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

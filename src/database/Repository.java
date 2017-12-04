@@ -57,6 +57,95 @@ public class Repository {
         return this.conn;
     }
     
+    public ArrayList<String> getEntityTypeDrops(EntityType type){
+        
+        ArrayList<String> items = new ArrayList<>();
+        
+        try {
+            Statement stmt = this.conn.createStatement();
+            String query = "select item.name from entity_type "
+                          + "inner join entity_type_drop on entity_type.id = entity_type_drop.entity_type_id "
+                          + "inner join item on entity_type_drop.item_id = item.id "
+                          + "where entity_type.id = " + type.getId() ;
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {
+                items.add(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
+    }
+    
+    public void addEntityDropToEntityType(Item item, EntityType entityType, int dropChance, int minCount, int maxCount){
+        	
+        try {
+            // (select id from item where name = itemName), #itemId
+            //  (select id from entity_type where name = entityTypeName), #entity name
+            // /dropchanc,
+            // minCount,
+            // maxCount);
+
+            Statement stmt = this.conn.createStatement();
+            String query = "insert into entity_type_drop (item_id, entity_type_id, dropChance, minCount, maxCount) Values ("
+                    + item.getItemId() + ","
+                    + entityType.getId() + ","
+                    + dropChance + ","
+                    + minCount + ","
+                    + maxCount + ")";
+            stmt.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ArrayList<String> getPlayerInventory(Player player){
+       ArrayList<String> itemNames = new ArrayList<>();
+        try {
+            
+            Statement stmt = this.conn.createStatement();
+            String query =  "select item.name from player "
+                    + "inner join player_inventory on player.id = player_inventory.player_id "
+                    + "inner join item_instance on player_inventory.item_instance_id = item_instance.id "
+                    + "inner join item on item_instance.item_id = item.id "
+                    + "where player.id=" + player.getPlayerId();
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()){
+                itemNames.add(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return itemNames;
+    }
+    
+    public void executeQuery(String query){
+         try {
+            Statement stmt = this.conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void createNewEntityType(String name, String description, int base_attack, int base_defense, int base_hit, int base_health){
+        try {
+            Statement stmt = this.conn.createStatement();
+            String query = "insert into entity_type (name, description, base_attack, base_defense, base_hit, base_health)Values("
+                    + "\"" + name + "\"" + ","
+                    + "\"" + description + "\"" + ","
+                    + base_attack + ","
+                    + base_defense + ","
+                    + base_hit + ","
+                    + base_health +")";
+            stmt.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void saveBattle(Battle battle){
          try {
             
