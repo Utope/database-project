@@ -62,13 +62,12 @@
                           <Component id="totalItemInstanceButton" max="32767" attributes="0"/>
                           <Component id="totalCountForSpecificEntity" max="32767" attributes="0"/>
                           <Component id="getAllRandomNamesButton" max="32767" attributes="0"/>
-                          <Component id="numberOfActionsButton" max="32767" attributes="0"/>
-                          <Component id="listAllEntityTypesButton" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="getPlayerInventoryButton" max="32767" attributes="0"/>
                           <Component id="getEntityTypeDropsButton" pref="286" max="32767" attributes="0"/>
+                          <Component id="listAllEntityTypesButton" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -88,18 +87,17 @@
                           <Component id="getEntityTypeDropsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="totalEntityCountButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="totalEntityCountButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="listAllEntityTypesButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="totalItemInstanceButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="totalCountForSpecificEntity" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="getAllRandomNamesButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="numberOfActionsButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="listAllEntityTypesButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="84" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -153,14 +151,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getAllRandomNamesButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="numberOfActionsButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Get Number of actions"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numberOfActionsButtonActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JButton" name="listAllEntityTypesButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="List all EntityTypes"/>
@@ -199,16 +189,16 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="newRandomNameButton" max="32767" attributes="0"/>
-                          <Component id="addNewItemType" max="32767" attributes="0"/>
-                          <Component id="newEntityTypeButton" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="newRandomNameButton" pref="580" max="32767" attributes="0"/>
+                          <Component id="addNewItemType" alignment="0" max="32767" attributes="0"/>
+                          <Component id="newEntityTypeButton" alignment="0" max="32767" attributes="0"/>
                           <Component id="deletePlayerInventoryButton" max="32767" attributes="0"/>
-                          <Component id="addDropToEntityType" max="32767" attributes="0"/>
+                          <Component id="addDropToEntityType" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="416" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

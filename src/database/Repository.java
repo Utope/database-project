@@ -428,7 +428,10 @@ public class Repository {
                 
                 ArrayList<EntityItemDrop> drops = new ArrayList<>();
                 
+                ItemManager.Instance().init();
+                
                 while(rs2.next()){
+                    
                     Item item = ItemManager.Instance().findItemById(rs2.getInt("item_id"));
                     if(item != null){
                        drops.add(new EntityItemDrop(rs2.getInt("id"), item, rs2.getInt("dropChance"), rs2.getInt("minCount"), rs2.getInt("maxCount")));
@@ -613,6 +616,8 @@ public class Repository {
         }
 
     } 
+    
+    
     
     public static void main(String[] args) {
         ItemManager.Instance().init();

@@ -9,6 +9,7 @@ import core.Entity;
 import core.EntityType;
 import core.Item;
 import core.ItemInstance;
+import core.ItemManager;
 import core.Player;
 import database.Repository;
 import java.awt.Dimension;
@@ -49,7 +50,6 @@ public class StatsScreen extends javax.swing.JFrame {
         totalItemInstanceButton = new javax.swing.JButton();
         totalCountForSpecificEntity = new javax.swing.JButton();
         getAllRandomNamesButton = new javax.swing.JButton();
-        numberOfActionsButton = new javax.swing.JButton();
         listAllEntityTypesButton = new javax.swing.JButton();
         getPlayerInventoryButton = new javax.swing.JButton();
         getEntityTypeDropsButton = new javax.swing.JButton();
@@ -104,13 +104,6 @@ public class StatsScreen extends javax.swing.JFrame {
             }
         });
 
-        numberOfActionsButton.setText("Get Number of actions");
-        numberOfActionsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                numberOfActionsButtonActionPerformed(evt);
-            }
-        });
-
         listAllEntityTypesButton.setText("List all EntityTypes");
         listAllEntityTypesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,13 +137,12 @@ public class StatsScreen extends javax.swing.JFrame {
                     .addComponent(totalEntityCountButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalItemInstanceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalCountForSpecificEntity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(getAllRandomNamesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(numberOfActionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(listAllEntityTypesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(getAllRandomNamesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(getPlayerInventoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(getEntityTypeDropsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                    .addComponent(getEntityTypeDropsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(listAllEntityTypesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -165,18 +157,16 @@ public class StatsScreen extends javax.swing.JFrame {
                     .addComponent(getAllItemTypesButton)
                     .addComponent(getEntityTypeDropsButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(totalEntityCountButton)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalEntityCountButton)
+                    .addComponent(listAllEntityTypesButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalItemInstanceButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalCountForSpecificEntity)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(getAllRandomNamesButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numberOfActionsButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(listAllEntityTypesButton)
-                .addContainerGap())
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("General Stats", jPanel1);
@@ -222,13 +212,13 @@ public class StatsScreen extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(newRandomNameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(newRandomNameButton, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
                     .addComponent(addNewItemType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(newEntityTypeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(deletePlayerInventoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(addDropToEntityType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(416, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -367,10 +357,6 @@ public class StatsScreen extends javax.swing.JFrame {
         Repository.Instance().createItem(itemName, itemDescription);
         JOptionPane.showMessageDialog(rootPane, "New Item created!");
     }//GEN-LAST:event_addNewItemTypeActionPerformed
-
-    private void numberOfActionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberOfActionsButtonActionPerformed
-        
-    }//GEN-LAST:event_numberOfActionsButtonActionPerformed
 
     private void newEntityTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntityTypeButtonActionPerformed
         
@@ -578,6 +564,7 @@ public class StatsScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_getPlayerInventoryButtonActionPerformed
 
     private void getEntityTypeDropsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getEntityTypeDropsButtonActionPerformed
+            ItemManager.Instance().init();
             ArrayList<EntityType> types = Repository.Instance().getAllEntityTypes();
             ArrayList<Object> entityTypeString = new ArrayList<>();
             
@@ -667,7 +654,6 @@ public class StatsScreen extends javax.swing.JFrame {
     private javax.swing.JButton listAllEntityTypesButton;
     private javax.swing.JButton newEntityTypeButton;
     private javax.swing.JButton newRandomNameButton;
-    private javax.swing.JButton numberOfActionsButton;
     private javax.swing.JButton totalCountForSpecificEntity;
     private javax.swing.JButton totalEntityCountButton;
     private javax.swing.JButton totalItemInstanceButton;
